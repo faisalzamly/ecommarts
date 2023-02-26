@@ -7,6 +7,9 @@ class Register_models(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile=models.IntegerField()
 
+    def __str__(self):
+        return self.user.first_name
+
     
 
 # Model Category
@@ -40,19 +43,20 @@ class Attribute(models.Model):
 class Attribute_Value(models.Model):
     name = models.CharField(max_length=20)
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)
+
 
     def __str__(self):
         return self.name
 
 
 class Attribute_product(models.Model):
+    name = models.CharField(max_length=20)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=0)
     def __str__(self):
-        return  str(self.product) 
+        return  str(self.product)+"," + str(self.attribute)
 
 
 class Image_Product(models.Model):
