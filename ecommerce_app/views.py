@@ -23,7 +23,7 @@ def register(request):
         if User.objects.filter(username=email):
             return render(request, "register.html")
         else:
-            user =User.objects.create_superuser(username=email,first_name=first_name,last_name=last_Name,password=Password)
+            user =User.objects.create_user(username=email,first_name=first_name,last_name=last_Name,password=Password)
             register_models =Register_models.objects.create(user=user,mobile=mobile)
             user.save()
             register_models.save()
