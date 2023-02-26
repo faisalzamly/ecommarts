@@ -103,6 +103,8 @@
                             </div>
                             <div class="tab-pane fade" id="account-tab" role="tabpanel" aria-labelledby="account-nav">
                                 <h4>Account Details</h4>
+                                <form method="post">
+                                    {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <input class="form-control" type="text" placeholder="First Name">
@@ -124,26 +126,47 @@
                                         <br><br>
                                     </div>
                                 </div>
+                            </form>
                                 <h4>Password change</h4>
+                                <form method="post">
+                                    {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="password" placeholder="Current Password">
+                                        <input class="form-control" type="password" placeholder="Current Password" name="current_password" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <input class="form-control" type="text" placeholder="New Password">
+                                        <input class="form-control" type="password" placeholder="New Password" name="new_password" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <input class="form-control" type="text" placeholder="Confirm Password">
+                                        <input class="form-control" type="password" placeholder="Confirm Password" name="confirm_password" required>
                                     </div>
                                     <div class="col-md-12">
                                         <button class="btn">Save Changes</button>
                                     </div>
                                 </div>
+                            </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            {% if alert %}
+            alert("Password Updated Successfully.");
+            document.location = "/"
+            {% endif %}
+        
+            {% if currpasswrong %}
+            alert("Current Password is wrong..");
+            document.location = "/my_account"
+            {% endif %}
+            
+            {% if passnotmatch %}
+            alert("Confirm Password is wrong..");
+            document.location = "/my_account"
+            {% endif %}
+        </script>
         <!-- My Account End -->
         {% endblock %}
