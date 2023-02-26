@@ -55,7 +55,7 @@ class Attribute_product(models.Model):
 
 class Image_Product(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.FilePathField(path="/image")
+    image = models.ImageField(path="/image")
 
 
 class Specification_Product(models.Model):
