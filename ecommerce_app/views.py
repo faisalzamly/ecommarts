@@ -50,6 +50,7 @@ def my_account(request):
     if request.method == "POST":
         if request.POST['current_password']!=None:
             current_password = request.POST['current_password']
+            
             new_password = request.POST['new_password']
             confirm_password=request.POST['confirm_password']
             if new_password != confirm_password:
