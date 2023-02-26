@@ -8,7 +8,7 @@ class Register_models(models.Model):
     mobile=models.IntegerField()
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.username
 
     
 
@@ -61,11 +61,7 @@ class Attribute_product(models.Model):
 
 class Image_Product(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-<<<<<<< HEAD
     image = models.ImageField(upload_to="image")
-=======
-    image = models.ImageField(upload_to=f"image/pro_", blank=True )
->>>>>>> 86c11700a4ae8db205e4836f92c93220deef9430
 
 
 class Specification_Product(models.Model):
