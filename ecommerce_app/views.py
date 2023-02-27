@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib.auth import login, authenticate,logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -23,7 +24,7 @@ def register(request):
         if User.objects.filter(username=email):
             return render(request, "register.html")
         else:
-            user =User.objects.create_superuser(username=email,first_name=first_name,last_name=last_Name,password=Password)
+            user =User.objects.create_user(username=email,first_name=first_name,last_name=last_Name,password=Password)
             register_models =Register_models.objects.create(user=user,mobile=mobile)
             user.save()
             register_models.save()
@@ -42,4 +43,45 @@ def login1(request):
             return redirect ("/")
         return redirect ("/login")
     return render(request, "login.html")
-    
+@login_required(login_url = '/login')
+def my_account(request):
+    if request.method == "POST":
+        if request.POST['current_password']!=None:
+            current_password = request.POST['current_password']
+            new_password = request.POST['new_password']
+            confirm_password=request.POST['confirm_password']
+            if new_password != confirm_password:
+                passnotmatch = True
+                return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+            try:
+                u = User.objects.get(id=request.user.id)
+                if u.check_password(current_password):
+                    u.set_password(new_password)
+                    u.save()
+                    alert = True
+                    return render(request, "my-account.html", {'alert':alert})
+                else:
+                    currpasswrong = True
+                    return render(request, "my-account.html", {'currpasswrong':currpasswrong})
+            except:
+                pass
+        else:
+            pass
+    else:
+        return render(request, "my-account.html")
+# def change_password(request):
+#     if request.method == "POST":
+#         current_password = request.POST['current_password']
+#         new_password = request.POST['new_password']
+#         try:
+#             u = User.objects.get(id=request.user.id)
+#             if u.check_password(current_password):
+#                 u.set_password(new_password)
+#                 u.save()
+#                 return render(request, "change_password.html")
+#             else:
+               
+#                 return render(request, "change_password.html")
+#         except:
+#             pass
+#     return render(request, "change_password.html")
