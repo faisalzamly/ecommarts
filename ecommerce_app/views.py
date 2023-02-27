@@ -45,6 +45,7 @@ def login1(request):
             return redirect ("/")
         return redirect ("/login")
     return render(request, "login.html")
+
 @login_required(login_url = '/login')
 def my_account(request):
     if request.method == "POST":
