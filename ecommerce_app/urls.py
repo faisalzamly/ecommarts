@@ -9,5 +9,6 @@ urlpatterns = [
         path("register/", register, name="register"),
         path("login/", login1, name="login"),
         path("my_account/", my_account, name="my_account"),
+        path("product/<int:Product_pk>", product_Details, name="product_Details"),
 
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]  

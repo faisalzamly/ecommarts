@@ -25,7 +25,7 @@ class Product(models.Model):
     name = models.CharField(max_length=80)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=None)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     stock = models.BooleanField(default=True)
     quantity = models.PositiveIntegerField(default=0)
 
@@ -62,6 +62,9 @@ class Attribute_product(models.Model):
 class Image_Product(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="image")
+
+    def __str__(self):
+        return  str(self.product)+"image" 
 
 
 class Specification_Product(models.Model):

@@ -73,3 +73,24 @@ def my_account(request):
             pass
     else:
         return render(request, "my-account.html")
+    
+
+def product_Details(request , Product_pk):
+    product = Product.objects.get(pk=Product_pk)
+    imeges=Image_Product.objects.filter(product=product.pk)
+    attribute=Attribute_product.objects.filter(product=product.pk)
+    attribute_value = []
+    for att in attribute:
+        attribute_value.append(att.attribute.name)
+    MyAttributeset = set(attribute_value)
+    attribute_value = list(MyAttributeset)
+
+    spacification = Specification_Product.objects.filter(product=product.pk)
+    context = {
+    'product': product,
+    'imeges':imeges,
+    'attributes':attribute,
+    'attributeValue':attribute_value,
+    'spacification':spacification
+    }
+    return render(request,"product-detail.html" , context)
