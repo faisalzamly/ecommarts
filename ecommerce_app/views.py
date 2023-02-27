@@ -100,9 +100,23 @@ def product_Details(request , Product_pk):
 def product_list(request):
     products =  Product.objects.all()
     categories= Category.objects.all()
+    productOneImge=[]
+    imgesOfProduct=[]
+    imeges = Image_Product.objects.all()
+    for product in products :
+        for img in imeges:
+            if product.pk == img.product.pk:
+                imgesOfProduct.append(img)
+        if len(imgesOfProduct) >0:
+            productOneImge.append(imgesOfProduct[0])
+            imgesOfProduct=[]
+        
+
+
     context = {
     'products': products,
     'categories':categories,
+    'imeges':productOneImge
     }
     return render(request ,"product-list.html" , context)
 

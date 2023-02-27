@@ -61,10 +61,7 @@ class Attribute_product(models.Model):
 
 class Image_Product(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-
     image = models.ImageField(upload_to=f"image/pro_", blank=True )
-
 
     def __str__(self):
         return  str(self.product)+"image" 
