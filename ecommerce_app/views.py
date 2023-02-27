@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
+
+    
     return render(request, "index.html")
 
 def register(request):
@@ -43,11 +45,19 @@ def login1(request):
             return redirect ("/")
         return redirect ("/login")
     return render(request, "login.html")
+<<<<<<< HEAD
+=======
+
+>>>>>>> d560a9c6e1b1f3c537b3150459115ee63d85a208
 @login_required(login_url = '/login')
 def my_account(request):
     if request.method == "POST":
         if request.POST['current_password']!=None:
             current_password = request.POST['current_password']
+<<<<<<< HEAD
+=======
+            print(current_password)
+>>>>>>> d560a9c6e1b1f3c537b3150459115ee63d85a208
             new_password = request.POST['new_password']
             confirm_password=request.POST['confirm_password']
             if new_password != confirm_password:
@@ -69,6 +79,7 @@ def my_account(request):
             pass
     else:
         return render(request, "my-account.html")
+<<<<<<< HEAD
 # def change_password(request):
 #     if request.method == "POST":
 #         current_password = request.POST['current_password']
@@ -85,3 +96,5 @@ def my_account(request):
 #         except:
 #             pass
 #     return render(request, "change_password.html")
+=======
+>>>>>>> d560a9c6e1b1f3c537b3150459115ee63d85a208
