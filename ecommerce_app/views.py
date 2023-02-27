@@ -46,12 +46,13 @@ def login1(request):
         return redirect ("/login")
     return render(request, "login.html")
 
+
+
 @login_required(login_url = '/login')
 def my_account(request):
     if request.method == "POST":
         if request.POST['current_password']!=None:
             current_password = request.POST['current_password']
-            
             new_password = request.POST['new_password']
             confirm_password=request.POST['confirm_password']
             if new_password != confirm_password:
@@ -73,6 +74,7 @@ def my_account(request):
             pass
     else:
         return render(request, "my-account.html")
+
     
 
 def product_Details(request , Product_pk):
@@ -94,3 +96,30 @@ def product_Details(request , Product_pk):
     'spacification':spacification
     }
     return render(request,"product-detail.html" , context)
+
+def product_list(request):
+    products =  Product.objects.all()
+    categories= Category.objects.all()
+    context = {
+    'products': products,
+    'categories':categories,
+    }
+    return render(request ,"product-list.html" , context)
+
+# def change_password(request):
+#     if request.method == "POST":
+#         current_password = request.POST['current_password']
+#         new_password = request.POST['new_password']
+#         try:
+#             u = User.objects.get(id=request.user.id)
+#             if u.check_password(current_password):
+#                 u.set_password(new_password)
+#                 u.save()
+#                 return render(request, "change_password.html")
+#             else:
+               
+#                 return render(request, "change_password.html")
+#         except:
+#             pass
+#     return render(request, "change_password.html")
+

@@ -15,8 +15,18 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 
+
+
+# admin.site.unregister(User)
+
+
 admin.site.register(User,UserAdmin)
+# admin.site.register(Register_models)
+# admin.site.register(Attribute)
+
+# admin.site.register(User,UserAdmin)
 admin.site.register(Register_models)
+
 admin.site.register(Product)
 admin.site.register(Category)
 admin.site.register(Attribute)
