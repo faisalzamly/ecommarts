@@ -81,6 +81,8 @@ def product_Details(request , Product_pk):
     product = Product.objects.get(pk=Product_pk)
     imeges=Image_Product.objects.filter(product=product.pk)
     attribute=Attribute_product.objects.filter(product=product.pk)
+    categories= Category.objects.all()
+    category= Category.objects.get(pk=product.category.pk)
     attribute_value = []
     for att in attribute:
         attribute_value.append(att.attribute.name)
@@ -93,7 +95,9 @@ def product_Details(request , Product_pk):
     'imeges':imeges,
     'attributes':attribute,
     'attributeValue':attribute_value,
-    'spacification':spacification
+    'spacification':spacification,
+    'categories':categories,
+    'category':category
     }
     return render(request,"product-detail.html" , context)
 
@@ -111,14 +115,196 @@ def product_list(request):
             productOneImge.append(imgesOfProduct[0])
             imgesOfProduct=[]
         
-
-
     context = {
     'products': products,
     'categories':categories,
     'imeges':productOneImge
     }
     return render(request ,"product-list.html" , context)
+
+#filter the products based on it's price
+def product_list_price(request,price_cat):
+    products =  Product.objects.all()
+    categories= Category.objects.all()
+    products_filtered=[]
+    max_price=0
+    min_price=0
+    price_text=''
+    if price_cat==1:
+        min_price=0
+        max_price=50
+        price_text='$0 to $50'
+    elif price_cat==2:
+        min_price=50
+        max_price=100
+        price_text='$50 to $100'
+    elif price_cat==3:
+        min_price=100
+        max_price=150
+        price_text='$100 to $150'
+    elif price_cat==4:
+        min_price=150
+        max_price=200
+        price_text='$150 to $200'
+    elif price_cat==5:
+        min_price=200
+        max_price=250
+        price_text='$200 to $250'
+    elif price_cat==6:
+        min_price=250
+        max_price=300
+        price_text='$250 to $300'
+    elif price_cat==7:
+        min_price=300
+        max_price=350
+        price_text='$300 to $350'
+    elif price_cat==8:
+        min_price=350
+        max_price=400
+        price_text='$350 to $400'
+    elif price_cat==9:
+        min_price=400
+        max_price=450
+        price_text='$400 to $450'
+    elif price_cat==10:
+        min_price=450
+        max_price=3000
+        price_text='$450 to $3000'
+ 
+    for product in products:
+        if int(product.price) >min_price and int(product.price)<=max_price:
+            products_filtered.append(product)
+
+    productOneImge=[]
+    imgesOfProduct=[]
+    imeges = Image_Product.objects.all()
+    for product in products :
+        for img in imeges:
+            if product.pk == img.product.pk:
+                imgesOfProduct.append(img)
+        if len(imgesOfProduct) >0:
+            productOneImge.append(imgesOfProduct[0])
+            imgesOfProduct=[]
+        
+    context = {
+    'products': products_filtered,
+    'categories':categories,
+    'imeges':productOneImge,
+    'price_cat':price_cat,
+    'price_text':price_text
+    }
+    return render(request ,"product-list.html" , context)
+
+
+#--------------------------------------------------------------------------------------
+#filter the products based on it's price and categores
+def product_list_priceAndCategory(request,category_pk,price_cat):
+    products =  Product.objects.filter(category=category_pk)
+    category= Category.objects.get(pk=category_pk)
+    categories= Category.objects.all()
+    products_filtered=[]
+    max_price=0
+    min_price=0
+    price_text=''
+    if price_cat==1:
+        min_price=0
+        max_price=50
+        price_text='$0 to $50'
+    elif price_cat==2:
+        min_price=50
+        max_price=100
+        price_text='$50 to $100'
+    elif price_cat==3:
+        min_price=100
+        max_price=150
+        price_text='$100 to $150'
+    elif price_cat==4:
+        min_price=150
+        max_price=200
+        price_text='$150 to $200'
+    elif price_cat==5:
+        min_price=200
+        max_price=250
+        price_text='$200 to $250'
+    elif price_cat==6:
+        min_price=250
+        max_price=300
+        price_text='$250 to $300'
+    elif price_cat==7:
+        min_price=300
+        max_price=350
+        price_text='$300 to $350'
+    elif price_cat==8:
+        min_price=350
+        max_price=400
+        price_text='$350 to $400'
+    elif price_cat==9:
+        min_price=400
+        max_price=450
+        price_text='$400 to $450'
+    elif price_cat==10:
+        min_price=450
+        max_price=3000
+        price_text='$450 to $3000'
+ 
+    for product in products:
+        if int(product.price) >min_price and int(product.price)<=max_price:
+            products_filtered.append(product)
+
+    productOneImge=[]
+    imgesOfProduct=[]
+    imeges = Image_Product.objects.all()
+    for product in products :
+        for img in imeges:
+            if product.pk == img.product.pk:
+                imgesOfProduct.append(img)
+        if len(imgesOfProduct) >0:
+            productOneImge.append(imgesOfProduct[0])
+            imgesOfProduct=[]
+        
+    context = {
+    'products': products_filtered,
+    'categories':categories,
+    'category':category,
+    'imeges':productOneImge,
+    'price_cat':price_cat,
+    'price_text':price_text
+    }
+    return render(request ,"product-list.html" , context)
+
+
+
+#--------------------------------------------------------------------------------------
+#filter the products based on it's category
+def product_category(request,category_pk):
+    products =  Product.objects.filter(category=category_pk)
+    category= Category.objects.get(pk=category_pk)
+    categories= Category.objects.all()
+    productOneImge=[]
+    imgesOfProduct=[]
+    imeges = Image_Product.objects.all()
+    for product in products :
+        for img in imeges:
+            if product.pk == img.product.pk:
+                imgesOfProduct.append(img)
+        if len(imgesOfProduct) >0:
+            productOneImge.append(imgesOfProduct[0])
+            imgesOfProduct=[]
+        
+    context = {
+    'products': products,
+    'category':category,
+    'categories':categories,
+    'imeges':productOneImge
+    }
+    return render(request ,"product-list.html" , context)
+
+def home(request):
+    categories= Category.objects.all()
+    context = {
+    'categories':categories,
+    }
+    return render(request ,"index.html" , context)
 
 # def change_password(request):
 #     if request.method == "POST":
