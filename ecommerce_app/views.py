@@ -76,13 +76,15 @@ def my_account(request):
         return render(request, "my-account.html")
 
     
-
+#--------------------------------------------------------------------------------------
+#product Details page
 def product_Details(request , Product_pk):
     product = Product.objects.get(pk=Product_pk)
     imeges=Image_Product.objects.filter(product=product.pk)
     attribute=Attribute_product.objects.filter(product=product.pk)
     categories= Category.objects.all()
     category= Category.objects.get(pk=product.category.pk)
+    related_products=Product.objects.filter(category=category.pk)
     attribute_value = []
     for att in attribute:
         attribute_value.append(att.attribute.name)
@@ -90,6 +92,19 @@ def product_Details(request , Product_pk):
     attribute_value = list(MyAttributeset)
 
     spacification = Specification_Product.objects.filter(product=product.pk)
+    #select only one imge for the releated products
+    productOneImge=[]
+    imgesOfProduct=[]
+    imegesForRelatedProducts = Image_Product.objects.all()
+    for product_re in related_products :
+        for img in imegesForRelatedProducts:
+            if product_re.pk == img.product.pk:
+                imgesOfProduct.append(img)
+        if len(imgesOfProduct) >0:
+            productOneImge.append(imgesOfProduct[0])
+            imgesOfProduct=[]
+    
+
     context = {
     'product': product,
     'imeges':imeges,
@@ -97,10 +112,14 @@ def product_Details(request , Product_pk):
     'attributeValue':attribute_value,
     'spacification':spacification,
     'categories':categories,
-    'category':category
+    'category':category,
+    'related_products':related_products,
+    'related_products_imeges':productOneImge
     }
     return render(request,"product-detail.html" , context)
 
+#--------------------------------------------------------------------------------------
+#desply all the products
 def product_list(request):
     products =  Product.objects.all()
     categories= Category.objects.all()
@@ -122,6 +141,8 @@ def product_list(request):
     }
     return render(request ,"product-list.html" , context)
 
+
+#--------------------------------------------------------------------------------------
 #filter the products based on it's price
 def product_list_price(request,price_cat):
     products =  Product.objects.all()
