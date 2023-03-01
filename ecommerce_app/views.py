@@ -322,8 +322,10 @@ def product_category(request,category_pk):
 
 def home(request):
     categories= Category.objects.all()
+    slider = Slider.objects.filter(active=True)[:4]
     context = {
     'categories':categories,
+    'slider':slider
     }
     return render(request ,"index.html" , context)
 
