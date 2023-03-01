@@ -5,9 +5,12 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
-
-    
-    return render(request, "index.html")
+    slider = Slider.objects.all()
+    print(slider)
+    context = {
+        "slider": slider
+    }
+    return render(request, "index.html", context)
 
 def register(request):
     if request.method == "GET":
@@ -322,8 +325,10 @@ def product_category(request,category_pk):
 
 def home(request):
     categories= Category.objects.all()
+    slider = Slider.objects.filter(active=True).order_by('pk')[:4]
     context = {
     'categories':categories,
+    'slider':slider
     }
     return render(request ,"index.html" , context)
 
@@ -343,4 +348,5 @@ def home(request):
 #         except:
 #             pass
 #     return render(request, "change_password.html")
+
 
