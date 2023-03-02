@@ -469,8 +469,10 @@ def orderd_product_list(request,order_cat):
 
 def home(request):
     categories= Category.objects.all()
+    slider = Slider.objects.filter(active=True)[:4]
     context = {
     'categories':categories,
+    'slider':slider
     }
     return render(request ,"index.html" , context)
 

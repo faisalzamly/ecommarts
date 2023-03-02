@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from PIL import Image
 
 
 class Register_models(models.Model):
@@ -99,3 +99,31 @@ class Tag_product(models.Model):
         return str(self.product)  + " : " +str(self.tag ) 
 
 
+
+    
+# Create Slider objects
+class Slider(models.Model):
+    title       = models.CharField(max_length=150)
+    sub_title   = models.CharField(max_length=100)
+    action_name = models.CharField(max_length=50)
+    link        = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='image/slider/%Y/%m/%d/')
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    def save(self):
+        super().save()  # saving image first
+
+        img = Image.open(self.image.path) # Open image using self
+        if img.height > 420 or img.width > 620:
+            new_width  = 600
+            new_height = new_width * img.height / img.width 
+            new_height = 400
+            new_width  = new_height * img.width / img.height
+            img = img.resize((int(new_width), int(new_height)), Image.LANCZOS)
+            img.save(self.image.path)  # saving image at the same path
+        if img.height < 400 or img.width < 600:
+            img = img.resize((600,400), Image.LANCZOS)
+            img.save(self.image.path)  # saving image at the same path

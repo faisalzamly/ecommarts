@@ -37,7 +37,4 @@ admin.site.register(Image_Product)
 admin.site.register(Prand)
 admin.site.register(Tags)
 admin.site.register(Tag_product)
-
-
-
-
+admin.site.register(Slider)
