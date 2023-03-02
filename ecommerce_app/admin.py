@@ -34,4 +34,10 @@ admin.site.register(Attribute)
 admin.site.register(Attribute_product)
 admin.site.register(Specification_Product)
 admin.site.register(Image_Product)
+admin.site.register(Prand)
+admin.site.register(Tags)
+admin.site.register(Tag_product)
+
+
+
 

@@ -20,13 +20,16 @@
                     <div class="row align-items-center">
                         <div class="col-md-5">
                             <div class="product-slider-single normal-slider">
-                                {% for img in imeges %}
+                                <img src="{{product.image.url}}" alt="Main Photo" /> {% for img in imeges %}
                                 <img src="{{img.image.url}}" alt="Main Photo" /> {% endfor %}
                             </div>
                             <div class="product-slider-single-nav normal-slider">
+                                <div class="slider-nav-img">
+                                    <img src="{{product.image.url}}" width="40px" height="50px" alt="small photo" />
+                                </div>
                                 {% for img in imeges %}
                                 <div class="slider-nav-img">
-                                    <img src="{{img.image.url}}" alt="small photo" />
+                                    <img src="{{img.image.url}}" width="40px" height="50px" alt="small photo" />
                                 </div>
                                 {% endfor %}
                             </div>
@@ -182,11 +185,11 @@
                                                 </div>
                                             </div>
                                             <div class="product-image">
-                                                {% for imgea in related_products_imeges %}{% if imgea.product.pk == related_pro.pk %}
+
                                                 <a href="{% url 'product_Details' related_pro.pk %}">
-                                                    <img src="{{imgea.image.url}}" alt="Product Image {{ product.pk}} {{imgea.product}}">
+                                                    <img src="{{related_pro.image.url}}" alt="Product Image {{ related_pro.pk}} {{imgea.product}}">
                                                 </a>
-                                                {% endif %} {% endfor %}
+
                                                 <div class="product-action">
                                                     <a href="#"><i class="fa fa-cart-plus"></i></a>
                                                     <a href="#"><i class="fa fa-heart"></i></a>
@@ -317,30 +320,21 @@
         <div class="sidebar-widget brands">
           <h2 class="title">Our Brands</h2>
           <ul>
-            <li><a href="#">Nulla </a><span>(45)</span></li>
-                                                <li><a href="#">Curabitur </a><span>(34)</span></li>
-                                                <li><a href="#">Nunc </a><span>(67)</span></li>
-                                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                                                <li><a href="#">Fusce </a><span>(89)</span></li>
-                                                <li><a href="#">Sagittis</a><span>(28)</span></li>
+            {% for prand in prands %}
+            <li><a href="{% url 'product_prand_list' prand.pk %}">{{prand.name}} </a><span> &nbsp; 
+                ({{prand.count}})</span></li>{% endfor %}
+
                                                 </ul>
                                             </div>
 
+                                            {% if tags %}
                                             <div class="sidebar-widget tag">
                                                 <h2 class="title">Tags Cloud</h2>
-                                                <a href="#">Lorem ipsum</a>
-                                                <a href="#">Vivamus</a>
-                                                <a href="#">Phasellus</a>
-                                                <a href="#">pulvinar</a>
-                                                <a href="#">Curabitur</a>
-                                                <a href="#">Fusce</a>
-                                                <a href="#">Sem quis</a>
-                                                <a href="#">Mollis metus</a>
-                                                <a href="#">Sit amet</a>
-                                                <a href="#">Vel posuere</a>
-                                                <a href="#">orci luctus</a>
-                                                <a href="#">Nam lorem</a>
+                                                {% for tag in tags %}
+                                                <a href="{% url 'product_tag_list' tag.tag.pk %}">{{tag.tag}}</a> {% endfor%}
+
                                             </div>
+                                            {% endif %}
                                         </div>
                                         <!-- Side Bar End -->
                                     </div>

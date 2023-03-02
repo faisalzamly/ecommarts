@@ -19,6 +19,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+# Model Prand
+class Prand(models.Model):
+    name=models.CharField(max_length=30)
+    icon=models.ImageField(upload_to=f"icon/prand", blank=True )
+    def __str__(self):
+        return self.name 
+
 
 # Model Product
 class Product(models.Model):
@@ -28,6 +35,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     stock = models.BooleanField(default=True)
     quantity = models.PositiveIntegerField(default=0)
+    image = models.ImageField(upload_to=f"image/pro_", blank=True )
+    created_at=models.DateTimeField(auto_now_add=True )
+    prand =models.ForeignKey(Prand , on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -74,3 +84,18 @@ class Specification_Product(models.Model):
 
     def __str__(self):
         return self.title +':'+self.name  
+    
+class Tags(models.Model):
+    name=models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name 
+
+class Tag_product(models.Model):
+    product= models.ForeignKey(Product, on_delete=models.CASCADE)
+    tag=models.ForeignKey(Tags, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.product)  + " : " +str(self.tag ) 
+
+

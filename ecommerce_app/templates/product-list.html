@@ -1,11 +1,22 @@
-{% extends 'base.html' %} {% load static %} {% block body %}
-
+{% extends 'base.html' %} {% block style %}
+<style>
+    .brand {
+        text-align: center;
+        font-size: 60px;
+        margin-top: -25px;
+        color: #ff6f61;
+        background-color: wheat;
+        padding: 5px 0;
+    }
+</style>{% endblock %} {% load static %} {% block body %}
 <!-- Breadcrumb Start -->
 <div class="breadcrumb-wrap">
     <div class="container-fluid">
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'home'  %}">Home</a></li>
-            <li class="breadcrumb-item">{% if category %} <a href="{% url 'product_category' category.pk %}">{{category.name}}</a> {% else %}
+            <li class="breadcrumb-item">{% if category %}
+                <a href="{% url 'product_category' category.pk %}">{{category.name}}</a> {% elif ProductsPrand %}
+                <a href="{% url 'product_prand_list' ProductsPrand.pk %}">{{ProductsPrand.name}}</a> {% else %}
 
                 <a href="{% url 'product_list'  %}">Products</a> {% endif %}</li>
             <li class="breadcrumb-item active">Product List</li>
@@ -32,11 +43,15 @@
                                 <div class="col-md-4">
                                     <div class="product-short">
                                         <div class="dropdown">
-                                            <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
+                                            {% if order_style %}
+                                            <div class="dropdown-toggle" data-toggle="dropdown">{{order_style}}</div>{% else%}
+                                            <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>{% endif%}
+
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item">Newest</a>
+                                                <a href="{% url 'orderd_product_list' 1 %}" class="dropdown-item">Newest</a>
                                                 <a href="#" class="dropdown-item">Popular</a>
                                                 <a href="#" class="dropdown-item">Most sale</a>
+                                                <a href="{% url 'orderd_product_list' 2 %}" class="dropdown-item">Oldest</a>
                                             </div>
                                         </div>
                                     </div>
@@ -75,7 +90,16 @@
                             </div>
                         </div>
                     </div>
-                    {% for product in products %}
+                    {% if ProductsPrand %}
+                    <div class="col-md-12">
+                        <h1 class="brand">{{ProductsPrand.name}}</h1>
+                    </div>
+                    {% elif tag %}
+                    <div class="col-md-12">
+                        <h1 class="brand">#{{tag.name}}</h1>
+                    </div>
+                    {% endif %}
+                    <br> {% for product in products %}
                     <div class="col-md-4">
                         <a href="{% url 'product_Details' product.pk %}">
                             <div class="product-item">
@@ -90,11 +114,11 @@
                                     </div>
                                 </div>
                                 <div class="product-image">
-                                    {% for imgea in imeges %}{% if imgea.product.pk == product.pk %}
+
                                     <a href="{% url 'product_Details' product.pk %}">
-                                        <img src="{{imgea.image.url}}" alt="Product Image {{ product.pk}} {{imgea.product}}">
+                                        <img src="{{product.image.url}}" height="300px" alt="Product Image {{ product.pk}} {{imgea.product}}">
                                     </a>
-                                    {% endif %} {% endfor %}
+
 
                                     <div class="product-action">
 
@@ -237,31 +261,23 @@
                 </div>
 
                 <div class="sidebar-widget brands">
+                    {% if prands %}
                     <h2 class="title">Our Brands</h2>
                     <ul>
-                        <li><a href="#">Nulla </a><span>(45)</span></li>
-                        <li><a href="#">Curabitur </a><span>(34)</span></li>
-                        <li><a href="#">Nunc </a><span>(67)</span></li>
-                        <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                        <li><a href="#">Fusce </a><span>(89)</span></li>
-                        <li><a href="#">Sagittis</a><span>(28)</span></li>
+                        {% if category %}{% for prand in prands %}
+                        <li><a href="{% url 'product_category_prand_list' category.pk prand.pk %}">{{prand.name}} </a><span>&nbsp; ({{prand.count}})</span></li>{% endfor %} {% else %} {% for prand in prands %}
+                        <li><a href="{% url 'product_prand_list' prand.pk %}">{{prand.name}} </a><span>&nbsp; ({{prand.count}})</span></li>{% endfor %}{% endif %}
+
+
                     </ul>
+                    {% endif %}
                 </div>
 
                 <div class="sidebar-widget tag">
+                    {% if tags %}
                     <h2 class="title">Tags Cloud</h2>
-                    <a href="#">Lorem ipsum</a>
-                    <a href="#">Vivamus</a>
-                    <a href="#">Phasellus</a>
-                    <a href="#">pulvinar</a>
-                    <a href="#">Curabitur</a>
-                    <a href="#">Fusce</a>
-                    <a href="#">Sem quis</a>
-                    <a href="#">Mollis metus</a>
-                    <a href="#">Sit amet</a>
-                    <a href="#">Vel posuere</a>
-                    <a href="#">orci luctus</a>
-                    <a href="#">Nam lorem</a>
+                    {%for tag in tags %}
+                    <a href="{% url 'product_tag_list' tag.pk %}">{{tag.name}}</a> {% endfor %} {% endif %}
                 </div>
             </div>
             <!-- Side Bar End -->

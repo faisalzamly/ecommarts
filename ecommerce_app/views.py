@@ -92,17 +92,21 @@ def product_Details(request , Product_pk):
     attribute_value = list(MyAttributeset)
 
     spacification = Specification_Product.objects.filter(product=product.pk)
-    #select only one imge for the releated products
-    productOneImge=[]
-    imgesOfProduct=[]
-    imegesForRelatedProducts = Image_Product.objects.all()
-    for product_re in related_products :
-        for img in imegesForRelatedProducts:
-            if product_re.pk == img.product.pk:
-                imgesOfProduct.append(img)
-        if len(imgesOfProduct) >0:
-            productOneImge.append(imgesOfProduct[0])
-            imgesOfProduct=[]
+    prands = Prand.objects.all()
+    tags=Tag_product.objects.filter(product=product.pk)
+    products=Product.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
     
 
     context = {
@@ -114,7 +118,9 @@ def product_Details(request , Product_pk):
     'categories':categories,
     'category':category,
     'related_products':related_products,
-    'related_products_imeges':productOneImge
+    'prands':prandinfo,
+    'tags':tags
+
     }
     return render(request,"product-detail.html" , context)
 
@@ -123,23 +129,142 @@ def product_Details(request , Product_pk):
 def product_list(request):
     products =  Product.objects.all()
     categories= Category.objects.all()
-    productOneImge=[]
-    imgesOfProduct=[]
-    imeges = Image_Product.objects.all()
-    for product in products :
-        for img in imeges:
-            if product.pk == img.product.pk:
-                imgesOfProduct.append(img)
-        if len(imgesOfProduct) >0:
-            productOneImge.append(imgesOfProduct[0])
-            imgesOfProduct=[]
-        
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
     context = {
     'products': products,
     'categories':categories,
-    'imeges':productOneImge
+    'prands':prandinfo,
+    'tags':tags
     }
     return render(request ,"product-list.html" , context)
+
+
+
+#-----------------------------------------------------------
+#Prand products
+def product_prand_list(request,prand_pk):
+    products =  Product.objects.filter(prand=prand_pk)
+    categories= Category.objects.all()
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    ProductsPrand=Prand.objects.get(pk=prand_pk)
+    allProducts=Product.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in allProducts:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+        
+    
+    context = {
+    'products': products,
+    'categories':categories,
+    'tags':tags,
+    'prands':prandinfo,
+    'ProductsPrand':ProductsPrand
+    }
+    return render(request ,"product-list.html" , context)
+
+
+#-----------------------------------------------------------
+#Prand products
+def product_tag_list(request,tag_pk):
+    tags =  Tag_product.objects.all()
+    tag=Tags.objects.get(pk=tag_pk)
+    my_products=[]
+    for item in tags:
+        if item.tag.pk==tag_pk:
+            prodct=Product.objects.get(pk=item.product.pk)
+            my_products.append(prodct)
+    categories= Category.objects.all()
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    allProducts=Product.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in allProducts:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+        
+    
+    context = {
+    'products': my_products,
+    'categories':categories,
+    'tags':tags,
+    'prands':prandinfo,
+    'tag':tag,
+    }
+    return render(request ,"product-list.html" , context)
+
+
+
+#-----------------------------------------------------------
+#Categoty Prand products
+def product_category_prand_list(request,category_pk, prand_pk):
+    products =  Product.objects.filter(prand=prand_pk)
+    categories= Category.objects.all()
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    selected_products=[]
+    ProductsPrand=Prand.objects.get(pk=prand_pk)
+    for product in products:
+        print('aaaa')
+        if product.category.pk==category_pk:
+            selected_products.append(product)
+            print('sss')
+    category= Category.objects.get(pk=category_pk)
+    allProducts=Product.objects.filter(category=category_pk)
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in allProducts:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+        
+    
+    context = {
+    'products': selected_products,
+    'categories':categories,
+    'category':category,
+    'tags':tags,
+    'prands':prandinfo,
+    'ProductsPrand':ProductsPrand
+    }
+    return render(request ,"product-list.html" , context)
+
 
 
 #--------------------------------------------------------------------------------------
@@ -191,26 +316,16 @@ def product_list_price(request,price_cat):
         min_price=450
         max_price=3000
         price_text='$450 to $3000'
- 
+
     for product in products:
         if int(product.price) >min_price and int(product.price)<=max_price:
             products_filtered.append(product)
 
-    productOneImge=[]
-    imgesOfProduct=[]
-    imeges = Image_Product.objects.all()
-    for product in products :
-        for img in imeges:
-            if product.pk == img.product.pk:
-                imgesOfProduct.append(img)
-        if len(imgesOfProduct) >0:
-            productOneImge.append(imgesOfProduct[0])
-            imgesOfProduct=[]
+
         
     context = {
     'products': products_filtered,
     'categories':categories,
-    'imeges':productOneImge,
     'price_cat':price_cat,
     'price_text':price_text
     }
@@ -272,22 +387,11 @@ def product_list_priceAndCategory(request,category_pk,price_cat):
         if int(product.price) >min_price and int(product.price)<=max_price:
             products_filtered.append(product)
 
-    productOneImge=[]
-    imgesOfProduct=[]
-    imeges = Image_Product.objects.all()
-    for product in products :
-        for img in imeges:
-            if product.pk == img.product.pk:
-                imgesOfProduct.append(img)
-        if len(imgesOfProduct) >0:
-            productOneImge.append(imgesOfProduct[0])
-            imgesOfProduct=[]
         
     context = {
     'products': products_filtered,
     'categories':categories,
     'category':category,
-    'imeges':productOneImge,
     'price_cat':price_cat,
     'price_text':price_text
     }
@@ -301,24 +405,67 @@ def product_category(request,category_pk):
     products =  Product.objects.filter(category=category_pk)
     category= Category.objects.get(pk=category_pk)
     categories= Category.objects.all()
-    productOneImge=[]
-    imgesOfProduct=[]
-    imeges = Image_Product.objects.all()
-    for product in products :
-        for img in imeges:
-            if product.pk == img.product.pk:
-                imgesOfProduct.append(img)
-        if len(imgesOfProduct) >0:
-            productOneImge.append(imgesOfProduct[0])
-            imgesOfProduct=[]
-        
+    prands = Prand.objects.all()
+    tags = Tags.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
     context = {
     'products': products,
     'category':category,
     'categories':categories,
-    'imeges':productOneImge
+    'prands':prandinfo,
+    'tags':tags,
     }
     return render(request ,"product-list.html" , context)
+
+
+
+#--------------------------------------------------------------------------------------
+#desply all the products
+def orderd_product_list(request,order_cat):
+    if order_cat==1:
+        products =  Product.objects.all().order_by('-created_at')
+        order_style='Newest'
+    elif order_cat==2:
+        products =  Product.objects.all().order_by('created_at')
+        order_style='Oldest'
+    else:
+        Product.objects.all()
+    categories= Category.objects.all()
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+    context = {
+    'products': products,
+    'categories':categories,
+    'prands':prandinfo,
+    'tags':tags,
+    'order_style':order_style
+    }
+    return render(request ,"product-list.html" , context)
+
+
 
 def home(request):
     categories= Category.objects.all()
@@ -327,20 +474,4 @@ def home(request):
     }
     return render(request ,"index.html" , context)
 
-# def change_password(request):
-#     if request.method == "POST":
-#         current_password = request.POST['current_password']
-#         new_password = request.POST['new_password']
-#         try:
-#             u = User.objects.get(id=request.user.id)
-#             if u.check_password(current_password):
-#                 u.set_password(new_password)
-#                 u.save()
-#                 return render(request, "change_password.html")
-#             else:
-               
-#                 return render(request, "change_password.html")
-#         except:
-#             pass
-#     return render(request, "change_password.html")
 

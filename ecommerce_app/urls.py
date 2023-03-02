@@ -11,11 +11,17 @@ urlpatterns = [
         path("my_account/", my_account, name="my_account"),
         path("product/<int:Product_pk>", product_Details, name="product_Details"),
         path("products", product_list, name="product_list"),
+        path("products/<int:order_cat>", orderd_product_list, name="orderd_product_list"),
         path("products/category/<int:category_pk>", product_category, name="product_category"),
+        path("products/Prand/<int:prand_pk>", product_prand_list, name="product_prand_list"),
+        path("products/tag/<int:tag_pk>", product_tag_list, name="product_tag_list"),
         path("Home", home, name="home"),
         path("products/price/<int:price_cat>", product_list_price, name="product_list_price"),
         path("products/category/<int:category_pk>/price/<int:price_cat>",
               product_list_priceAndCategory,
                 name="product_list_priceAndCategory"),
+        path("products/category/<int:category_pk>/prand/<int:prand_pk>",
+              product_category_prand_list,
+                name="product_category_prand_list"),
 
 ]  
