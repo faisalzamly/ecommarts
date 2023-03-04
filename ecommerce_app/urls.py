@@ -11,6 +11,8 @@ urlpatterns = [
         path("my_account/", my_account, name="my_account"),
         path("product/<int:Product_pk>", product_Details, name="product_Details"),
         path("products", product_list, name="product_list"),
+        path("productss", product_list_api, name="product_list_api"),
+        path("products/page/<int:page>", product_list_pagination, name="product_list_pagination"),
         path("products/<int:order_cat>", orderd_product_list, name="orderd_product_list"),
         path("products/category/<int:category_pk>", product_category, name="product_category"),
         path("products/Prand/<int:prand_pk>", product_prand_list, name="product_prand_list"),
@@ -23,5 +25,6 @@ urlpatterns = [
         path("products/category/<int:category_pk>/prand/<int:prand_pk>",
               product_category_prand_list,
                 name="product_category_prand_list"),
+        path("products.json",listing_api,name="products-api"),
 
 ]  

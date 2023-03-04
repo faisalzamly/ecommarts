@@ -147,28 +147,19 @@
                 </div>
 
                 <!-- Pagination Start -->
-                <div class="col-md-12" style="margin-bottom: 30px;">
-
+                <div class="col-md-12">
                     <nav aria-label="Page navigation example">
-                        {% if page_number %}
-                        <p style="text-align: center;">Current Page: <b>{{products.number}}</b></p>
-                        {% endif %}
-
                         <ul class="pagination justify-content-center">
-                            {% if has_pre %}
                             <li class="page-item ">
-                                <a class="page-link" href="{% url 'product_list_pagination' pre %}"> Previous</a>
-                            </li>{% endif%} {% for page_number in products.paginator.page_range %}
-                            <li class="page-item ">
-                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_list_pagination' page_number %}"> 
-                                         {{page_number}}</a>
-                            </li>{% endfor %} {% if has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="{% url 'product_list_pagination' next %}"> Next </a>
+                                <a class="page-link" href="#" id="prev">Previous</a>
                             </li>
-                            {% endif %}
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" id="next">Next</a>
+                            </li>
                         </ul>
-
                     </nav>
                 </div>
                 <!-- Pagination Start -->
@@ -314,5 +305,84 @@
         </div>
     </div>
 </div>
+<div id="Allproducts" class=" col-lg-12 sidebar ">
+    <h1>h111</h1>
+</div>
+
 <!-- Brand End -->
-{% endblock %}
+
+
+
+{% endblock %}{% block script %}
+<script>
+    // alert('aaaa')
+    async function getData(url, page, paginateBy) {
+        // alert('aaaa')
+        const urlWithParams = url + "?" + new URLSearchParams({
+            page: page,
+            per_page: paginateBy
+        })
+        const response = await fetch(urlWithParams);
+        return response.json();
+    }
+    class FauxPaginator {
+
+        constructor(perPage) {
+
+            this.perPage = perPage
+            this.pageIndex = 1
+            console.log("el")
+            this.container = document.getElementById("Allproducts")
+            this.elements = document.querySelectorAll("pre")
+
+            // this.label = document.querySelector("#current")
+            this.prev = document.getElementById("prev")
+            this.next = document.getElementById("next")
+
+            this.prev.addEventListener("click", this.onPrevClick.bind(this))
+            this.next.addEventListener("click", this.onNextClick.bind(this))
+            console.log("el2")
+            this.goToPage()
+        }
+        onPrevClick(event) {
+            event.preventDefault()
+            this.pageIndex--;
+            this.goToPage()
+        }
+        onNextClick(event) {
+            event.preventDefault()
+            this.pageIndex++;
+            this.goToPage()
+        }
+        addElement(keyword) {
+            const pre = document.createElement("pre")
+            pre.append(keyword)
+            this.container.append(pre)
+        }
+        goToPage() {
+            console.log("el3")
+            getData("{% url 'products-api' %}", this.pageIndex, this.perPage)
+                .then(response => {
+                    console.log("el4")
+                    this.container.innerHTML = '';
+                    response.data.forEach((el) => {
+                        this.addElement(el)
+
+                    });
+                    console.log("consol output");
+
+
+
+                    // this.label.innerText = this.pageIndex;
+
+                    const firstPage = this.pageIndex === 1
+                    const lastPage = !response.page.has_next
+
+                    this.prev.style.display = firstPage ? "none" : "inline-block"
+                    this.next.style.display = lastPage ? "none" : "inline-block"
+
+                });
+        }
+    }
+    new FauxPaginator(9);
+</script> {% endblock %}

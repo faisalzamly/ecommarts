@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from .models import *
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
@@ -151,6 +153,87 @@ def product_list(request):
     }
     return render(request ,"product-list.html" , context)
 
+#--------------------------------------------------------------------------------------
+#desply all the products with pagination
+def product_list_pagination(request,page):
+    products =  Product.objects.all()
+    paginator = Paginator(products, per_page=9)
+    page_object = paginator.get_page(page)
+    categories= Category.objects.all()
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
+    context = {
+    'products': page_object,
+    'categories':categories,
+    'prands':prandinfo,
+    'tags':tags,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
+    }
+    return render(request ,"product-list.html" , context)
+#--------------------------------------------------------------------------------------
+#desply all the products with pagination API
+def product_list_api(request):
+    products =  Product.objects.all()
+    categories= Category.objects.all()
+    prands = Prand.objects.all()
+    tags=Tags.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+    context = {
+    'products': products,
+    'categories':categories,
+    'prands':prandinfo,
+    'tags':tags,
+    }
+    return render(request ,"product-list_api.html" , context)
+
+def listing_api(request):
+    page_number = request.GET.get("page", 1)
+    per_page = request.GET.get("per_page", 9)
+    keywords = Product.objects.all()
+    paginator = Paginator(keywords, per_page)
+    page_obj = paginator.get_page(page_number)
+    data = [{"name": product.name , } for product in page_obj.object_list]
+    payload = {
+    "page": {
+    "current": page_obj.number,
+    "has_next": page_obj.has_next(),
+    "has_previous": page_obj.has_previous(),
+    },
+    "data": data
+    }
+    return JsonResponse(payload)
 
 
 #-----------------------------------------------------------
