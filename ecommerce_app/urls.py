@@ -17,5 +17,7 @@ urlpatterns = [
         path("products/category/<int:category_pk>/price/<int:price_cat>",
               product_list_priceAndCategory,
                 name="product_list_priceAndCategory"),
+        path("cart/", cart, name="cart"),
+        path("checkout/", checkout, name="checkout"),
 
 ]  

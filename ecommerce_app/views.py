@@ -320,6 +320,43 @@ def product_category(request,category_pk):
     }
     return render(request ,"product-list.html" , context)
 
+
+# Add Order in The Cart
+def cart(request):
+
+    if request.user.is_authenticated:
+        user =request.user.id
+        order, created = Order.objects.get_or_create(user=user, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {"get_cart_items":0, "get_cart_total":0}
+    context = {
+        "items": items,
+        "order": order
+    }
+    return render(request, "cart.html", context)
+
+
+# Create Checkout cart
+def checkout(request):
+    if request.user.is_authenticated:
+        user =request.user.id
+        order, created = Order.objects.get_or_create(user=user, complete=False) 
+    else:
+        order = {"get_cart_items":0, "get_cart_total":0}
+    context = {
+        "order": order
+    }
+    return render(request, "checkout.html", context)
+
+
+# Billing Shipping Address
+def shippingAddress(request):
+    pass
+
+
+# Home page
 def home(request):
     categories= Category.objects.all()
     slider = Slider.objects.filter(active=True)[:4]

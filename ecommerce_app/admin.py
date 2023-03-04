@@ -35,3 +35,8 @@ admin.site.register(Attribute_product)
 admin.site.register(Specification_Product)
 admin.site.register(Image_Product)
 admin.site.register(Slider)
+admin.site.register(Order)
+admin.site.register(OrderItem)
+admin.site.register(ShippingAddress)
+
+
