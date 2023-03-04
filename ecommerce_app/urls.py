@@ -26,5 +26,7 @@ urlpatterns = [
               product_category_prand_list,
                 name="product_category_prand_list"),
         path("products.json",listing_api,name="products-api"),
+        path("cart/", cart, name="cart"),
+        path("checkout/", checkout, name="checkout"),
 
 ]  

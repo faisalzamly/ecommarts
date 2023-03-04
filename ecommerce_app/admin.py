@@ -38,3 +38,8 @@ admin.site.register(Prand)
 admin.site.register(Tags)
 admin.site.register(Tag_product)
 admin.site.register(Slider)
+admin.site.register(Order)
+admin.site.register(OrderItem)
+admin.site.register(ShippingAddress)
+
+
