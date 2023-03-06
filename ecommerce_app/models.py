@@ -6,6 +6,7 @@ from PIL import Image
 class Register_models(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile=models.IntegerField()
+    address=models.CharField(blank=True,max_length=50,default='Address')
 
     def __str__(self):
         return self.user.username
@@ -154,7 +155,22 @@ class ShippingAddress(models.Model):
     def __str__(self):
         return self.address
 
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    name =models.CharField(max_length=50)
+    email=models.EmailField()
+    review=models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name  
+
+class Contact(models.Model):
+    email=models.EmailField()
+    subject=models.CharField(max_length=100)
+    message=models.TextField()
+    def __str__(self):
+        return self.name
 
 # Create Slider objects
 class Slider(models.Model):

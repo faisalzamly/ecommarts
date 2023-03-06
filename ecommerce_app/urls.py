@@ -28,5 +28,7 @@ urlpatterns = [
         path("products.json",listing_api,name="products-api"),
         path("cart/", cart, name="cart"),
         path("checkout/", checkout, name="checkout"),
-
+        path("Logout", Logout, name="Logout"),
+        path("contact", contact, name="contact"),
+        path("change_password", change_password, name="change_password"),
 ]  
