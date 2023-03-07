@@ -39,6 +39,8 @@ urlpatterns = [
         path("products.json/<int:category_pk>",listing_category_api,name="products-cat-api"),
         path("cart/", cart, name="cart"),
         path("checkout/", checkout, name="checkout"),
-        path("proccess_order/", proccessOrder, name="proccess_order"),
+        path("Logout", Logout, name="Logout"),
+        path("contact", contact, name="contact"),
+        path("change_password", change_password, name="change_password"),        path("proccess_order/", proccessOrder, name="proccess_order"),
 
 ]  

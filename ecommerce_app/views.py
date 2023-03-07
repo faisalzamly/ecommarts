@@ -4,6 +4,8 @@ from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate as auth_user, login, logout as auth_logout
@@ -18,6 +20,7 @@ def register(request):
         first_name=request.POST['first_Name']
         last_Name=request.POST['last_Name']
         email=request.POST['email']
+        username=request.POST['username']
         mobile=request.POST['mobile']
         Password=request.POST['Password']
         confirm_password=request.POST['confirm_password']
@@ -25,17 +28,16 @@ def register(request):
         if Password != confirm_password:
             passnotmatch = True
             return render(request, "student_registration.html", {'passnotmatch':passnotmatch})
-        if User.objects.filter(username=email):
+        if User.objects.filter(username=username):
             return render(request, "register.html")
         else:
-            user =User.objects.create_user(username=email,first_name=first_name,last_name=last_Name,password=Password)
+            user =User.objects.create_user(username=username,email=email,first_name=first_name,last_name=last_Name,password=Password)
             register_models =Register_models.objects.create(user=user,mobile=mobile)
             user.save()
             register_models.save()
             return redirect ("/")
             # return render(request, "register.html")
     return render(request, "register.html")
-
 def login1(request):
     if request.method == "POST":
         username = request.POST['email']
@@ -55,31 +57,55 @@ def login1(request):
 @login_required(login_url = '/login')
 def my_account(request):
     if request.method == "POST":
-        if request.POST['current_password']!=None:
-            current_password = request.POST['current_password']
-            new_password = request.POST['new_password']
-            confirm_password=request.POST['confirm_password']
-            if new_password != confirm_password:
-                passnotmatch = True
-                return render(request, "my-account.html", {'passnotmatch':passnotmatch})
-            try:
-                u = User.objects.get(id=request.user.id)
-                if u.check_password(current_password):
-                    u.set_password(new_password)
-                    u.save()
-                    alert = True
-                    return render(request, "my-account.html", {'alert':alert})
-                else:
-                    currpasswrong = True
-                    return render(request, "my-account.html", {'currpasswrong':currpasswrong})
-            except:
-                pass
-        else:
-            pass
-    else:
-        return render(request, "my-account.html")
+      
 
-    
+        edit_user = Register_models.objects.get(user=request.user)
+        first_name =request.POST['first_name']
+        last_Name =request.POST['last_name']
+        mobile =request.POST['mobile']
+        email =request.POST['email']
+        address =request.POST['address']
+        edit_user.user.email = email
+        edit_user.mobile = mobile
+        edit_user.user.first_name = first_name
+        edit_user.user.last_name = last_Name
+        edit_user.address = address
+        edit_user.user.save()
+        edit_user.save()
+        context = {
+        'mobile':edit_user.mobile,
+        'address':edit_user.address,
+        }
+        return render(request, "my-account.html",context)
+        
+                  
+    else:
+        edit_user = Register_models.objects.get(user=request.user)
+        context = {
+        'mobile':edit_user.mobile,
+        'address':edit_user.address,
+    }
+        return render(request, "my-account.html",context)
+@login_required(login_url = '/login')
+def change_password(request):
+    current_password = request.POST['current_password']
+    new_password = request.POST['new_password']
+    confirm_password=request.POST['confirm_password']
+    if new_password != confirm_password:
+        passnotmatch = True
+        return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+    try:
+        u = User.objects.get(id=request.user.id)
+        if u.check_password(current_password):
+            u.set_password(new_password)
+            u.save()
+            alert = True
+            return render(request, "my-account.html", {'alert':alert})
+        else:
+            currpasswrong = True
+            return render(request, "my-account.html", {'currpasswrong':currpasswrong})
+    except:
+        return render(request, "my-account.html", {'passnotmatch':passnotmatch})
 #--------------------------------------------------------------------------------------
 #product Details page
 def product_Details(request , Product_pk):
@@ -112,6 +138,7 @@ def product_Details(request , Product_pk):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
     
+    review = Review.objects.filter(product=product.pk)
 
     context = {
     'product': product,
@@ -123,9 +150,19 @@ def product_Details(request , Product_pk):
     'category':category,
     'related_products':related_products,
     'prands':prandinfo,
-    'tags':tags
+    'tags':tags,
+    'review':review
+
 
     }
+    if request.method == "POST":
+        
+        name=request.user.first_name
+        email=request.user.email
+        review=request.POST['review']
+        review=Review.objects.create(name=name,email=email,review=review,product=product)
+        review.save()
+        return render(request,"index.html" )
     return render(request,"product-detail.html" , context)
 
 #--------------------------------------------------------------------------------------
@@ -821,6 +858,7 @@ def home(request):
     return render(request ,"index.html" , context)
 
 
-def logout(request):
-    auth_logout(request)
-    return HttpResponseRedirect("/")
+
+def Logout(request):
+    logout(request)
+    return redirect ("/")
