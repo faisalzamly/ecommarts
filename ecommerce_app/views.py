@@ -4,12 +4,12 @@ from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth import authenticate as auth_user, login, logout as auth_logout
+import json
+import datetime
 
-# Create your views here.
-def index(request):
-
-    
-    return render(request, "index.html")
 
 def register(request):
     if request.method == "GET":
@@ -44,6 +44,8 @@ def login1(request):
 
         if user is not None:
             login(request, user)
+            if request.user.is_superuser:
+                return redirect("/admin")
             return redirect ("/")
         return redirect ("/login")
     return render(request, "login.html")
@@ -129,6 +131,17 @@ def product_Details(request , Product_pk):
 #--------------------------------------------------------------------------------------
 #desply all the products
 def product_list(request):
+
+    if request.user.is_authenticated:
+        user_id =request.user.id
+        order, created = Order.objects.get_or_create(user=user_id, complete=False)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {"get_cart_items":0, "get_cart_total":0}
+        cartItems = order['get_cart_items']
+
     products =  Product.objects.all()
     categories= Category.objects.all()
     prands = Prand.objects.all()
@@ -149,7 +162,8 @@ def product_list(request):
     'products': products,
     'categories':categories,
     'prands':prandinfo,
-    'tags':tags
+    'tags':tags,
+    'cartItems':cartItems,
     }
     return render(request ,"product-list.html" , context)
 
@@ -551,48 +565,117 @@ def orderd_product_list(request,order_cat):
 
 
 # Add Order in The Cart
+@login_required(login_url = '/login')
 def cart(request):
 
     if request.user.is_authenticated:
-        user =request.user.id
-        order, created = Order.objects.get_or_create(user=user, complete=False)
+
+        order, created = Order.objects.get_or_create(user=request.user, complete=False)
         items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
         items = []
         order = {"get_cart_items":0, "get_cart_total":0}
+        cartItems = {"order.get_cart_items"}
     context = {
         "items": items,
-        "order": order
+        "order": order,
+        "cartItems":cartItems
     }
+    
     return render(request, "cart.html", context)
 
 
 # Create Checkout cart
+@login_required(login_url = '/login')
 def checkout(request):
     if request.user.is_authenticated:
         user =request.user.id
         order, created = Order.objects.get_or_create(user=user, complete=False) 
+        cartItems = order.get_cart_items
     else:
         order = {"get_cart_items":0, "get_cart_total":0}
     context = {
-        "order": order
+        "order": order,
+        "cartItems":cartItems
     }
     return render(request, "checkout.html", context)
 
 
-# Billing Shipping Address
-def shippingAddress(request):
-    pass
 
+@login_required(login_url= '/login')
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    action = data['action']
+   
+    user = request.user
+    product = Product.objects.get(pk=productId)
+    order, created = Order.objects.get_or_create(user=user, complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+    orderItem.save()
 
+    if orderItem.quantity <=0:
+        orderItem.delete()
+    return JsonResponse('Item was added', safe=False)
+
+def proccessOrder(request):
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+    if request.user.is_authenticated:
+        user = request.user
+        order, created = Order.objects.get_or_create(user=user, complete=False)
+        order.transaction_id = transaction_id
+        total = float(data['total'])
+        if total == order.get_cart_total:
+            order.complete = True
+            order.save()
+        else:
+            print("order is not complete")
+        
+        if order.complete == True:
+            ShippingAddress.objects.create(
+                user=user,
+                order=order,
+                first_name=data['shipping']['first_name'],
+                last_name=data['shipping']['last_name'],
+                email=data['shipping']['email'],
+                phone=data['shipping']['phone'],
+                address=data['shipping']['address'],
+                city=data['shipping']['city'],
+                state=data['shipping']['state'],
+                zipcode=data['shipping']['zipcode'],
+            )
+    else:
+        print("You are not authenticated")
+   
+    return JsonResponse('Payment subbmitted', safe=False)
 # Home page
 def home(request):
+    if request.user.is_authenticated:
+        user_id =request.user.id
+        order , created = Order.objects.get_or_create(user=request.user, complete= False)
+        
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {"get_cart_items":0, "get_cart_total":0}
+        cartItems = order['get_cart_items']
+
     categories= Category.objects.all()
     slider = Slider.objects.filter(active=True)[:4]
     context = {
     'categories':categories,
-    'slider':slider
+    'slider':slider,
+    'cartItems':cartItems,
     }
     return render(request ,"index.html" , context)
 
 
+def logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect("/")

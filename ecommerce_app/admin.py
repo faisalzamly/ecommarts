@@ -14,19 +14,7 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [ProfileInline]
 
 admin.site.unregister(User)
-
-
-
-# admin.site.unregister(User)
-
-
 admin.site.register(User,UserAdmin)
-# admin.site.register(Register_models)
-# admin.site.register(Attribute)
-
-# admin.site.register(User,UserAdmin)
-admin.site.register(Register_models)
-
 admin.site.register(Product)
 admin.site.register(Category)
 admin.site.register(Attribute)
@@ -41,5 +29,3 @@ admin.site.register(Slider)
 admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(ShippingAddress)
-
-
