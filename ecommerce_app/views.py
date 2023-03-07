@@ -215,36 +215,68 @@ def product_list_api(request):
     'categories':categories,
     'prands':prandinfo,
     'tags':tags,
+
     }
     return render(request ,"product-list_api.html" , context)
 
+# ---------------------------------------------------------------------
+# API for all products 
 def listing_api(request):
     page_number = request.GET.get("page", 1)
     per_page = request.GET.get("per_page", 9)
     keywords = Product.objects.all()
     paginator = Paginator(keywords, per_page)
     page_obj = paginator.get_page(page_number)
-    data = [{"name": product.name , } for product in page_obj.object_list]
+    data = [{"name": product.name ,"price":product.price,"imge":product.image.url ,"pk":product.pk} for product in page_obj.object_list]
     payload = {
     "page": {
     "current": page_obj.number,
     "has_next": page_obj.has_next(),
     "has_previous": page_obj.has_previous(),
+    "page_range":len(paginator.page_range),
+ 
     },
-    "data": data
+    "data": data,
+    
+    }
+    return JsonResponse(payload)
+
+
+# ---------------------------------------------------------------------
+# API for spacific category  
+def listing_category_api(request,category_pk):
+    page_number = request.GET.get("page", 1)
+    per_page = request.GET.get("per_page", 9)
+    products =  Product.objects.filter(category=category_pk)
+    paginator = Paginator(products, per_page)
+    page_obj = paginator.get_page(page_number)
+    data = [{"name": product.name ,"price":product.price,"imge":product.image.url ,"pk":product.pk} for product in page_obj.object_list]
+    payload = {
+    "page": {
+    "current": page_obj.number,
+    "has_next": page_obj.has_next(),
+    "has_previous": page_obj.has_previous(),
+    "page_range":len(paginator.page_range),
+    "category":category_pk
+ 
+    },
+    "data": data,
+    
     }
     return JsonResponse(payload)
 
 
 #-----------------------------------------------------------
 #Prand products
-def product_prand_list(request,prand_pk):
+def product_prand_list(request,prand_pk,page=1):
     products =  Product.objects.filter(prand=prand_pk)
     categories= Category.objects.all()
     prands = Prand.objects.all()
     tags=Tags.objects.all()
     ProductsPrand=Prand.objects.get(pk=prand_pk)
     allProducts=Product.objects.all()
+    paginator = Paginator(products, per_page=9)
+    page_object = paginator.get_page(page)
     prandinfo=[]
     for pran in prands :
         count=0
@@ -258,20 +290,28 @@ def product_prand_list(request,prand_pk):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
         
-    
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
     context = {
-    'products': products,
+    'products': page_object,
     'categories':categories,
     'tags':tags,
     'prands':prandinfo,
-    'ProductsPrand':ProductsPrand
+    'ProductsPrand':ProductsPrand,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
     }
     return render(request ,"product-list.html" , context)
 
 
 #-----------------------------------------------------------
 #Prand products
-def product_tag_list(request,tag_pk):
+def product_tag_list(request,tag_pk,page=1):
     tags =  Tag_product.objects.all()
     tag=Tags.objects.get(pk=tag_pk)
     my_products=[]
@@ -296,13 +336,23 @@ def product_tag_list(request,tag_pk):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
         
-    
+    paginator = Paginator(my_products, per_page=9)
+    page_object = paginator.get_page(page)
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
     context = {
-    'products': my_products,
+    'products': page_object,
     'categories':categories,
     'tags':tags,
     'prands':prandinfo,
     'tag':tag,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
     }
     return render(request ,"product-list.html" , context)
 
@@ -310,7 +360,7 @@ def product_tag_list(request,tag_pk):
 
 #-----------------------------------------------------------
 #Categoty Prand products
-def product_category_prand_list(request,category_pk, prand_pk):
+def product_category_prand_list(request,category_pk, prand_pk,page=1):
     products =  Product.objects.filter(prand=prand_pk)
     categories= Category.objects.all()
     prands = Prand.objects.all()
@@ -336,15 +386,29 @@ def product_category_prand_list(request,category_pk, prand_pk):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
-        
-    
+
+    paginator = Paginator(selected_products, per_page=9)
+    page_object = paginator.get_page(page)
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
+    cat_prand={'category_pk':category_pk,'prand_pk':prand_pk}
+
     context = {
-    'products': selected_products,
+    'products': page_object,
     'categories':categories,
     'category':category,
     'tags':tags,
     'prands':prandinfo,
-    'ProductsPrand':ProductsPrand
+    'ProductsPrand':ProductsPrand,
+    'cat_prand':cat_prand,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
+
     }
     return render(request ,"product-list.html" , context)
 
@@ -352,7 +416,7 @@ def product_category_prand_list(request,category_pk, prand_pk):
 
 #--------------------------------------------------------------------------------------
 #filter the products based on it's price
-def product_list_price(request,price_cat):
+def product_list_price(request,price_cat,page=1):
     products =  Product.objects.all()
     categories= Category.objects.all()
     products_filtered=[]
@@ -400,24 +464,50 @@ def product_list_price(request,price_cat):
         max_price=3000
         price_text='$450 to $3000'
 
+    tags = Tags.objects.all()
     for product in products:
         if int(product.price) >min_price and int(product.price)<=max_price:
             products_filtered.append(product)
 
+    prands = Prand.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products_filtered:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
 
-        
+    paginator = Paginator(products_filtered, per_page=9)
+    page_object = paginator.get_page(page)
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1    
     context = {
-    'products': products_filtered,
+    'products': page_object,
     'categories':categories,
     'price_cat':price_cat,
-    'price_text':price_text
+    'tags':tags,
+    'prands':prandinfo,
+    'price_text':price_text,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
     }
     return render(request ,"product-list.html" , context)
 
 
 #--------------------------------------------------------------------------------------
 #filter the products based on it's price and categores
-def product_list_priceAndCategory(request,category_pk,price_cat):
+def product_list_priceAndCategory(request,category_pk,price_cat,page=1):
     products =  Product.objects.filter(category=category_pk)
     category= Category.objects.get(pk=category_pk)
     categories= Category.objects.all()
@@ -465,31 +555,12 @@ def product_list_priceAndCategory(request,category_pk,price_cat):
         min_price=450
         max_price=3000
         price_text='$450 to $3000'
- 
+    tags = Tags.objects.all()
     for product in products:
         if int(product.price) >min_price and int(product.price)<=max_price:
             products_filtered.append(product)
 
-        
-    context = {
-    'products': products_filtered,
-    'categories':categories,
-    'category':category,
-    'price_cat':price_cat,
-    'price_text':price_text
-    }
-    return render(request ,"product-list.html" , context)
-
-
-
-#--------------------------------------------------------------------------------------
-#filter the products based on it's category
-def product_category(request,category_pk):
-    products =  Product.objects.filter(category=category_pk)
-    category= Category.objects.get(pk=category_pk)
-    categories= Category.objects.all()
     prands = Prand.objects.all()
-    tags = Tags.objects.all()
     prandinfo=[]
     for pran in prands :
         count=0
@@ -502,12 +573,73 @@ def product_category(request,category_pk):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
+
+    paginator = Paginator(products_filtered, per_page=9)
+    page_object = paginator.get_page(page)
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
+
+    cat_price={'category_pk':category_pk,'price_cat':price_cat}
     context = {
-    'products': products,
+    'products': page_object,
+    'categories':categories,
+    'category':category,
+    'price_cat':price_cat,
+    'price_text':price_text,
+    'tags':tags,
+    'prands':prandinfo,
+    'cat_price':cat_price,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
+    }
+    return render(request ,"product-list.html" , context)
+
+
+
+#--------------------------------------------------------------------------------------
+#filter the products based on it's category
+def product_category(request,category_pk,page=1):
+    products =  Product.objects.filter(category=category_pk)
+    category= Category.objects.get(pk=category_pk)
+    categories= Category.objects.all()
+    tags = Tags.objects.all()
+    paginator = Paginator(products, per_page=9)
+    page_object = paginator.get_page(page)
+    prands = Prand.objects.all()
+    prandinfo=[]
+    for pran in prands :
+        count=0
+        pranditem = {}
+        for prducta in products:
+            if(prducta.prand.pk==pran.pk):
+                count+=1
+        if count>0:
+            pranditem.update({"name":pran})
+            pranditem.update({"count":count})
+            pranditem.update({"pk":pran.pk})
+            prandinfo.append(pranditem)
+
+
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
+    context = {
+    'products': page_object,
     'category':category,
     'categories':categories,
     'prands':prandinfo,
     'tags':tags,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next
     }
     return render(request ,"product-list.html" , context)
 
@@ -515,7 +647,7 @@ def product_category(request,category_pk):
 
 #--------------------------------------------------------------------------------------
 #desply all the products
-def orderd_product_list(request,order_cat):
+def orderd_product_list(request,order_cat,page=1):
     if order_cat==1:
         products =  Product.objects.all().order_by('-created_at')
         order_style='Newest'
@@ -527,6 +659,8 @@ def orderd_product_list(request,order_cat):
     categories= Category.objects.all()
     prands = Prand.objects.all()
     tags=Tags.objects.all()
+    paginator = Paginator(products, per_page=9)
+    page_object = paginator.get_page(page)
     prandinfo=[]
     for pran in prands :
         count=0
@@ -539,12 +673,23 @@ def orderd_product_list(request,order_cat):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
+    has_pre=page_object.has_previous()
+    has_next=page_object.has_next()
+    pre=page_object.number-1
+    next=page_object.number+1
+    
     context = {
-    'products': products,
+    'products': page_object,
     'categories':categories,
     'prands':prandinfo,
     'tags':tags,
-    'order_style':order_style
+    'order_style':order_style,
+    'page_num':page,
+    'has_pre':has_pre,
+    'has_next':has_next,
+    'pre':pre,
+    'next':next,
+    'order_cat':order_cat
     }
     return render(request ,"product-list.html" , context)
 

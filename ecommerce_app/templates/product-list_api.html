@@ -105,57 +105,69 @@
                         <h1 class="brand">#{{tag.name}}</h1>
                     </div>
                     {% endif %}
-                    <br> {% for product in products %}
-                    <div class="col-md-4">
-                        <a href="{% url 'product_Details' product.pk %}">
-                            <div class="product-item">
-                                <div class="product-title">
-                                    <a href="{% url 'product_Details' product.pk %}">{{product.name}}  </a>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
+                    <div class="row col-md-12" id="Allproducts">
+                        <div class=" col-lg-12 sidebar ">
+                            <h1>h111</h1>
+                        </div>
+                        <br> {% for product in products %}
+                        <div class="col-md-4">
+                            <a href="{% url 'product_Details' product.pk %}">
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="{% url 'product_Details' product.pk %}">{{product.name}}  </a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+
+                                        <a href="{% url 'product_Details' product.pk %}">
+                                            <img src="{{product.image.url}}" height="300px" alt="Product Image {{ product.pk}} {{imgea.product}}">
+                                        </a>
+
+
+                                        <div class="product-action">
+
+                                            <a href="{% url 'product_Details' product.pk %}"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="#"><i class="fa fa-heart"></i></a>
+                                            <a href="#"><i class="fa fa-search"></i></a>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>{{product.price}}</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                     </div>
                                 </div>
-                                <div class="product-image">
-
-                                    <a href="{% url 'product_Details' product.pk %}">
-                                        <img src="{{product.image.url}}" height="300px" alt="Product Image {{ product.pk}} {{imgea.product}}">
-                                    </a>
-
-
-                                    <div class="product-action">
-
-                                        <a href="{% url 'product_Details' product.pk %}"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-
-                                    </div>
-
-                                </div>
-                                <div class="product-price">
-                                    <h3><span>$</span>{{product.price}}</h3>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
 
                 </div>
 
                 <!-- Pagination Start -->
                 <div class="col-md-12">
                     <nav aria-label="Page navigation example">
+
+                        <p style="text-align: center;">Current Page:
+                            <b id="currentPage">
+                                </b>
+                        </p>
+
                         <ul class="pagination justify-content-center">
                             <li class="page-item ">
                                 <a class="page-link" href="#" id="prev">Previous</a>
                             </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <div style="display: flex; flex-direction: row;" id="page_paginator">
+
+                            </div>
+
                             <li class="page-item">
                                 <a class="page-link" href="#" id="next">Next</a>
                             </li>
@@ -305,9 +317,7 @@
         </div>
     </div>
 </div>
-<div id="Allproducts" class=" col-lg-12 sidebar ">
-    <h1>h111</h1>
-</div>
+
 
 <!-- Brand End -->
 
@@ -335,7 +345,8 @@
             this.container = document.getElementById("Allproducts")
             this.elements = document.querySelectorAll("pre")
 
-            // this.label = document.querySelector("#current")
+            this.label = document.getElementById("currentPage")
+            this.page_paginator = document.getElementById("page_paginator")
             this.prev = document.getElementById("prev")
             this.next = document.getElementById("next")
 
@@ -348,41 +359,162 @@
             event.preventDefault()
             this.pageIndex--;
             this.goToPage()
+            document.body.scrollTop = document.documentElement.scrollTop = 170;
+
         }
         onNextClick(event) {
             event.preventDefault()
             this.pageIndex++;
             this.goToPage()
+            document.body.scrollTop = document.documentElement.scrollTop = 170;
+
         }
-        addElement(keyword) {
-            const pre = document.createElement("pre")
-            pre.append(keyword)
-            this.container.append(pre)
+        addElement(pk, name, price, imge, product) {
+            const divContaner = document.createElement("div")
+            divContaner.classList.add("col-md-4")
+            const pig_a = document.createElement("a")
+            const url_to_product_Detiles = 'product/' + pk;
+            pig_a.setAttribute("href", url_to_product_Detiles)
+
+            const divproductItem = document.createElement("div")
+            divContaner.classList.add("product-item")
+            const divproductTitle = document.createElement("div")
+            divproductTitle.classList.add("product-title")
+                // title
+            const title_a = document.createElement("a")
+            title_a.setAttribute("href", url_to_product_Detiles)
+            title_a.append(document.createTextNode(name))
+            divproductTitle.append(title_a)
+                // Rating
+            const divRating = document.createElement("div")
+            divRating.classList.add("ratting")
+            for (let i = 0; i < 5; i++) {
+                const ii = document.createElement("i")
+                ii.classList.add("fa-star")
+                ii.classList.add("fa")
+                divRating.append(ii)
+            }
+            divproductTitle.append(divRating)
+            divproductItem.appendChild(divproductTitle)
+                // Product Imge
+            const divImge = document.createElement("div")
+            divImge.classList.add("product-image")
+            const imge_a = document.createElement("a")
+            imge_a.setAttribute("href", url_to_product_Detiles)
+            const imge_img = document.createElement("img")
+                // var imge_path = "media" + imge
+            imge_img.setAttribute("src", imge)
+            imge_img.setAttribute("height", "300px")
+            imge_img.setAttribute("alt", "Product Image")
+            imge_a.append(imge_img)
+            divImge.append(imge_a)
+
+            // Product action
+            const divAction = document.createElement("div")
+            divAction.classList.add("product-action")
+            const action_a = document.createElement("a")
+            action_a.setAttribute("href", url_to_product_Detiles)
+            const ii = document.createElement("i")
+            ii.classList.add("fa-cart-plus")
+            ii.classList.add("fa")
+            action_a.append(ii)
+            const action_a2 = document.createElement("a")
+            action_a2.setAttribute("href", url_to_product_Detiles)
+            const ii2 = document.createElement("i")
+            ii2.classList.add("fa-heart")
+            ii2.classList.add("fa")
+            action_a2.append(ii2)
+            const action_a3 = document.createElement("a")
+            action_a3.setAttribute("href", url_to_product_Detiles)
+            const ii3 = document.createElement("i")
+            ii3.classList.add("fa-search")
+            ii3.classList.add("fa")
+            action_a3.append(ii3)
+            divAction.append(action_a)
+            divAction.append(action_a2)
+            divAction.append(action_a3)
+            divImge.append(divAction)
+            divproductItem.appendChild(divImge)
+                // productPrice
+            const divPrice = document.createElement("div")
+            divPrice.classList.add("product-price")
+            const h3_Price = document.createElement("h3")
+            const span_Price = document.createElement("span")
+            span_Price.append(document.createTextNode("$"))
+            h3_Price.appendChild(span_Price)
+            h3_Price.appendChild(document.createTextNode(price))
+            const btn_a = document.createElement("a")
+
+            btn_a.setAttribute("href", url_to_product_Detiles)
+
+            btn_a.classList.add("btn")
+            const ii_buy = document.createElement("i")
+            ii_buy.classList.add("fa-shopping-cart")
+            ii_buy.classList.add("fa")
+            btn_a.appendChild(ii_buy)
+            btn_a.appendChild(document.createTextNode("Buy Now"))
+            divPrice.append(h3_Price)
+            divPrice.append(btn_a)
+                // finishing
+            divproductItem.appendChild(divPrice)
+            pig_a.append(divproductItem)
+            divContaner.appendChild(pig_a)
+
+
+            this.container.append(divContaner)
         }
         goToPage() {
-            console.log("el3")
+            console.log("el3");
             getData("{% url 'products-api' %}", this.pageIndex, this.perPage)
-                .then(response => {
-                    console.log("el4")
-                    this.container.innerHTML = '';
-                    response.data.forEach((el) => {
-                        this.addElement(el)
 
-                    });
-                    console.log("consol output");
-
-
-
-                    // this.label.innerText = this.pageIndex;
-
-                    const firstPage = this.pageIndex === 1
-                    const lastPage = !response.page.has_next
-
-                    this.prev.style.display = firstPage ? "none" : "inline-block"
-                    this.next.style.display = lastPage ? "none" : "inline-block"
+            .then(response => {
+                console.log("el4")
+                this.container.innerHTML = '';
+                response.data.forEach((el) => {
+                    console.log(el.pk)
+                    console.log(el.name)
+                    console.log(el.price)
+                    console.log(el.pk)
+                    this.addElement(el.pk, el.name, el.price, el.imge, el)
 
                 });
+                console.log("consol output");
+
+
+
+                // this.label.innerText = this.pageIndex;
+
+                const firstPage = this.pageIndex === 1
+                const lastPage = !response.page.has_next
+
+                this.prev.style.display = firstPage ? "none" : "inline-block"
+                this.next.style.display = lastPage ? "none" : "inline-block"
+                this.label.innerHTML = "" + this.pageIndex;
+                this.page_paginator.innerHTML = ''
+                for (let i = 1; i <= response.page.page_range; i++) {
+                    const li_page = document.createElement("li")
+                    li_page.classList.add("page-item")
+                    const a_page = document.createElement("a")
+                    a_page.classList.add("page-link")
+                    if (i == this.pageIndex) {
+                        a_page.classList.add("current")
+                    }
+                    a_page.appendChild(document.createTextNode(i))
+
+                    a_page.addEventListener("click", () => {
+                        this.pageIndex = a_page.innerHTML;
+                        this.goToPage()
+                        document.body.scrollTop = document.documentElement.scrollTop = 170;
+                    });
+                    li_page.appendChild(a_page)
+
+                    this.page_paginator.append(li_page)
+                }
+
+
+
+            });
         }
     }
     new FauxPaginator(9);
-</script> {% endblock %}
+</script> {% endblock %};
