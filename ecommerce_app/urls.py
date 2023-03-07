@@ -9,6 +9,7 @@ urlpatterns = [
         path("register/", register, name="register"),
         path("login/", login1, name="login"),
         path("my_account/", my_account, name="my_account"),
+        path('logout/',logout, name="logout"),
         path("product/<int:Product_pk>", product_Details, name="product_Details"),
         path("products", product_list_api, name="product_list"),
         path("productss", product_list_api, name="product_list_api"),
@@ -34,8 +35,10 @@ urlpatterns = [
               product_category_prand_list,
                 name="product_category_prand_list"),
         path("products.json",listing_api,name="products-api"),
+        path('update_item/', updateItem, name="update_item"),
         path("products.json/<int:category_pk>",listing_category_api,name="products-cat-api"),
         path("cart/", cart, name="cart"),
         path("checkout/", checkout, name="checkout"),
+        path("proccess_order/", proccessOrder, name="proccess_order"),
 
 ]  

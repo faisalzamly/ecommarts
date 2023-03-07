@@ -128,16 +128,16 @@
 
                                     <div class="product-action">
 
-                                        <a href="{% url 'product_Details' product.pk %}"><i class="fa fa-cart-plus"></i></a>
+                                        <button type="button" class="btn  update-cart" data-product="{{product.id}}" data-action="add">
+                                            <i class="fa fa-cart-plus"></i></button>
                                         <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
 
                                     </div>
 
                                 </div>
                                 <div class="product-price">
-                                    <h3><span>$</span>{{product.price}}</h3>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    <strong class="text-white"><span>$</span>{{product.price}}</strong>
+                                    <a class="btn" href="{% url 'product_Details' product.pk %}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                                 </div>
                             </div>
                         </a>
@@ -279,7 +279,7 @@
                             </div>
                             <div class="product-image">
                                 <a href="product-detail.html">
-                                    <img src="img/product-10.jpg" alt="Product Image">
+                                    <img src="" alt="Product Image">
                                 </a>
                                 <div class="product-action">
                                     <a href="#"><i class="fa fa-cart-plus"></i></a>
@@ -305,7 +305,7 @@
                             </div>
                             <div class="product-image">
                                 <a href="product-detail.html">
-                                    <img src="img/product-9.jpg" alt="Product Image">
+                                    <img src="" alt="Product Image">
                                 </a>
                                 <div class="product-action">
                                     <a href="#"><i class="fa fa-cart-plus"></i></a>
@@ -331,7 +331,7 @@
                             </div>
                             <div class="product-image">
                                 <a href="product-detail.html">
-                                    <img src="img/product-8.jpg" alt="Product Image">
+                                    <img src="" alt="Product Image">
                                 </a>
                                 <div class="product-action">
                                     <a href="#"><i class="fa fa-cart-plus"></i></a>
@@ -379,12 +379,12 @@
 <div class="brand">
     <div class="container-fluid">
         <div class="brand-slider">
-            <div class="brand-item"><img src="static/img/brand-1.png" alt=""></div>
-            <div class="brand-item"><img src="static/img/brand-2.png" alt=""></div>
-            <div class="brand-item"><img src="static/img/brand-3.png" alt=""></div>
-            <div class="brand-item"><img src="static/img/brand-4.png" alt=""></div>
-            <div class="brand-item"><img src="static/img/brand-5.png" alt=""></div>
-            <div class="brand-item"><img src="static/img/brand-6.png" alt=""></div>
+            <div class="brand-item"><img src="" alt=""></div>
+            <div class="brand-item"><img src="" alt=""></div>
+            <div class="brand-item"><img src="" alt=""></div>
+            <div class="brand-item"><img src="" alt=""></div>
+            <div class="brand-item"><img src="" alt=""></div>
+            <div class="brand-item"><img src="" alt=""></div>
         </div>
     </div>
 </div>
