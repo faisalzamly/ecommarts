@@ -7,7 +7,7 @@ class Register_models(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile=models.IntegerField()
     address=models.CharField(blank=True,max_length=50,default='Address')
-
+    
     def __str__(self):
         return self.user.username
 
