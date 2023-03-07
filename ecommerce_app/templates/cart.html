@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'base.html' %} 
 {% block body %}
         <div class="breadcrumb-wrap">
             <div class="container-fluid">
@@ -34,16 +33,16 @@
                                         <tr>
                                             <td>
                                                 <div class="img">
-                                                    <a href="#"><img src="img/product-1.jpg" alt="Image"></a>
+                                                    <a href="#"><img src="{{item.product.image.url}}" alt="Image"></a>
                                                     <p>{{item.product.name}}</p>
                                                 </div>
                                             </td>
                                             <td>${{item.product.price}}</td>
                                             <td>
                                                 <div class="qty">
-                                                    <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                    <button class="btn-plus update-cart"data-product="{{item.product.id}}"  data-action="remove"><i class="fa fa-minus"></i></button>
                                                     <input type="text" value="{{item.quantity}}">
-                                                    <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                    <button class="btn-minus update-cart" data-product="{{item.product.id}}" data-action="add"><i class="fa  fa-plus"></i></button>
                                                 </div>
                                             </td>
                                             <td>${{item.get_total}}</td>
@@ -85,5 +84,4 @@
             </div>
         </div>
         <!-- Cart End -->
-        
-        {% endblock %}
+{% endblock body %}

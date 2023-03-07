@@ -4,14 +4,12 @@ from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.core.mail import send_mail
-from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth import authenticate as auth_user, login, logout as auth_logout
+import json
+import datetime
 
-# Create your views here.
-def index(request):
-
-    
-    return render(request, "index.html")
 
 def register(request):
     if request.method == "GET":
@@ -20,7 +18,6 @@ def register(request):
         first_name=request.POST['first_Name']
         last_Name=request.POST['last_Name']
         email=request.POST['email']
-        username=request.POST['username']
         mobile=request.POST['mobile']
         Password=request.POST['Password']
         confirm_password=request.POST['confirm_password']
@@ -28,16 +25,17 @@ def register(request):
         if Password != confirm_password:
             passnotmatch = True
             return render(request, "student_registration.html", {'passnotmatch':passnotmatch})
-        if User.objects.filter(username=username):
+        if User.objects.filter(username=email):
             return render(request, "register.html")
         else:
-            user =User.objects.create_user(username=username,email=email,first_name=first_name,last_name=last_Name,password=Password)
+            user =User.objects.create_user(username=email,first_name=first_name,last_name=last_Name,password=Password)
             register_models =Register_models.objects.create(user=user,mobile=mobile)
             user.save()
             register_models.save()
             return redirect ("/")
             # return render(request, "register.html")
     return render(request, "register.html")
+
 def login1(request):
     if request.method == "POST":
         username = request.POST['email']
@@ -46,6 +44,8 @@ def login1(request):
 
         if user is not None:
             login(request, user)
+            if request.user.is_superuser:
+                return redirect("/admin")
             return redirect ("/")
         return redirect ("/login")
     return render(request, "login.html")
@@ -55,55 +55,31 @@ def login1(request):
 @login_required(login_url = '/login')
 def my_account(request):
     if request.method == "POST":
-      
-
-        edit_user = Register_models.objects.get(user=request.user)
-        first_name =request.POST['first_name']
-        last_Name =request.POST['last_name']
-        mobile =request.POST['mobile']
-        email =request.POST['email']
-        address =request.POST['address']
-        edit_user.user.email = email
-        edit_user.mobile = mobile
-        edit_user.user.first_name = first_name
-        edit_user.user.last_name = last_Name
-        edit_user.address = address
-        edit_user.user.save()
-        edit_user.save()
-        context = {
-        'mobile':edit_user.mobile,
-        'address':edit_user.address,
-        }
-        return render(request, "my-account.html",context)
-        
-                  
-    else:
-        edit_user = Register_models.objects.get(user=request.user)
-        context = {
-        'mobile':edit_user.mobile,
-        'address':edit_user.address,
-    }
-        return render(request, "my-account.html",context)
-@login_required(login_url = '/login')
-def change_password(request):
-    current_password = request.POST['current_password']
-    new_password = request.POST['new_password']
-    confirm_password=request.POST['confirm_password']
-    if new_password != confirm_password:
-        passnotmatch = True
-        return render(request, "my-account.html", {'passnotmatch':passnotmatch})
-    try:
-        u = User.objects.get(id=request.user.id)
-        if u.check_password(current_password):
-            u.set_password(new_password)
-            u.save()
-            alert = True
-            return render(request, "my-account.html", {'alert':alert})
+        if request.POST['current_password']!=None:
+            current_password = request.POST['current_password']
+            new_password = request.POST['new_password']
+            confirm_password=request.POST['confirm_password']
+            if new_password != confirm_password:
+                passnotmatch = True
+                return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+            try:
+                u = User.objects.get(id=request.user.id)
+                if u.check_password(current_password):
+                    u.set_password(new_password)
+                    u.save()
+                    alert = True
+                    return render(request, "my-account.html", {'alert':alert})
+                else:
+                    currpasswrong = True
+                    return render(request, "my-account.html", {'currpasswrong':currpasswrong})
+            except:
+                pass
         else:
-            currpasswrong = True
-            return render(request, "my-account.html", {'currpasswrong':currpasswrong})
-    except:
-        return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+            pass
+    else:
+        return render(request, "my-account.html")
+
+    
 #--------------------------------------------------------------------------------------
 #product Details page
 def product_Details(request , Product_pk):
@@ -136,7 +112,6 @@ def product_Details(request , Product_pk):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
     
-    review = Review.objects.filter(product=product.pk)
 
     context = {
     'product': product,
@@ -148,24 +123,25 @@ def product_Details(request , Product_pk):
     'category':category,
     'related_products':related_products,
     'prands':prandinfo,
-    'tags':tags,
-    'review':review
-
+    'tags':tags
 
     }
-    if request.method == "POST":
-        
-        name=request.user.first_name
-        email=request.user.email
-        review=request.POST['review']
-        review=Review.objects.create(name=name,email=email,review=review,product=product)
-        review.save()
-        return render(request,"index.html" )
     return render(request,"product-detail.html" , context)
 
 #--------------------------------------------------------------------------------------
 #desply all the products
 def product_list(request):
+
+    if request.user.is_authenticated:
+        user_id =request.user.id
+        order, created = Order.objects.get_or_create(user=user_id, complete=False)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {"get_cart_items":0, "get_cart_total":0}
+        cartItems = order['get_cart_items']
+
     products =  Product.objects.all()
     categories= Category.objects.all()
     prands = Prand.objects.all()
@@ -186,7 +162,8 @@ def product_list(request):
     'products': products,
     'categories':categories,
     'prands':prandinfo,
-    'tags':tags
+    'tags':tags,
+    'cartItems':cartItems,
     }
     return render(request ,"product-list.html" , context)
 
@@ -588,69 +565,117 @@ def orderd_product_list(request,order_cat):
 
 
 # Add Order in The Cart
+@login_required(login_url = '/login')
 def cart(request):
 
     if request.user.is_authenticated:
-        user =request.user.id
-        order, created = Order.objects.get_or_create(user=user, complete=False)
+
+        order, created = Order.objects.get_or_create(user=request.user, complete=False)
         items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
         items = []
         order = {"get_cart_items":0, "get_cart_total":0}
+        cartItems = {"order.get_cart_items"}
     context = {
         "items": items,
-        "order": order
+        "order": order,
+        "cartItems":cartItems
     }
+    
     return render(request, "cart.html", context)
 
 
 # Create Checkout cart
+@login_required(login_url = '/login')
 def checkout(request):
     if request.user.is_authenticated:
         user =request.user.id
         order, created = Order.objects.get_or_create(user=user, complete=False) 
+        cartItems = order.get_cart_items
     else:
         order = {"get_cart_items":0, "get_cart_total":0}
     context = {
-        "order": order
+        "order": order,
+        "cartItems":cartItems
     }
     return render(request, "checkout.html", context)
 
 
-# Billing Shipping Address
-def shippingAddress(request):
-    pass
 
+@login_required(login_url= '/login')
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    action = data['action']
+   
+    user = request.user
+    product = Product.objects.get(pk=productId)
+    order, created = Order.objects.get_or_create(user=user, complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+    orderItem.save()
 
+    if orderItem.quantity <=0:
+        orderItem.delete()
+    return JsonResponse('Item was added', safe=False)
+
+def proccessOrder(request):
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+    if request.user.is_authenticated:
+        user = request.user
+        order, created = Order.objects.get_or_create(user=user, complete=False)
+        order.transaction_id = transaction_id
+        total = float(data['total'])
+        if total == order.get_cart_total:
+            order.complete = True
+            order.save()
+        else:
+            print("order is not complete")
+        
+        if order.complete == True:
+            ShippingAddress.objects.create(
+                user=user,
+                order=order,
+                first_name=data['shipping']['first_name'],
+                last_name=data['shipping']['last_name'],
+                email=data['shipping']['email'],
+                phone=data['shipping']['phone'],
+                address=data['shipping']['address'],
+                city=data['shipping']['city'],
+                state=data['shipping']['state'],
+                zipcode=data['shipping']['zipcode'],
+            )
+    else:
+        print("You are not authenticated")
+   
+    return JsonResponse('Payment subbmitted', safe=False)
 # Home page
 def home(request):
+    if request.user.is_authenticated:
+        user_id =request.user.id
+        order , created = Order.objects.get_or_create(user=request.user, complete= False)
+        
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {"get_cart_items":0, "get_cart_total":0}
+        cartItems = order['get_cart_items']
+
     categories= Category.objects.all()
     slider = Slider.objects.filter(active=True)[:4]
     context = {
     'categories':categories,
-    'slider':slider
+    'slider':slider,
+    'cartItems':cartItems,
     }
     return render(request ,"index.html" , context)
 
 
-def contact(request):
-    if request.method == "POST":       
-        subject=request.POST['subject']        
-        message=request.POST['message']     
-        data_user = Register_models.objects.get(user=request.user)
-        email=data_user.user.email
-        send_mail(
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,
-        [email],
-        fail_silently=False,
-            )   
-        Contact.objects.create(email=email,subject=subject,message=message)
-        return render(request ,"contact.html")
-    return render(request ,"contact.html")
-
-
-def Logout(request):
-    logout(request)
-    return redirect ("/")
+def logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect("/")
