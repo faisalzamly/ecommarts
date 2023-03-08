@@ -201,12 +201,17 @@ def product_list(request):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
+
+    
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
     context = {
     'products': products,
     'categories':categories,
     'prands':prandinfo,
     'tags':tags,
     'cartItems':cartItems,
+    'recent_products':recent_products,
     }
     return render(request ,"product-list.html" , context)
 
@@ -232,6 +237,9 @@ def product_list_pagination(request,page):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
 
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
+
     has_pre=page_object.has_previous()
     has_next=page_object.has_next()
     pre=page_object.number-1
@@ -240,12 +248,13 @@ def product_list_pagination(request,page):
     'products': page_object,
     'categories':categories,
     'prands':prandinfo,
+    'recent_products':recent_products,
     'tags':tags,
     'page_num':page,
     'has_pre':has_pre,
     'has_next':has_next,
     'pre':pre,
-    'next':next
+    'next':next,
     }
     return render(request ,"product-list.html" , context)
 #--------------------------------------------------------------------------------------
@@ -267,11 +276,15 @@ def product_list_api(request):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
+
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
     context = {
     'products': products,
     'categories':categories,
     'prands':prandinfo,
     'tags':tags,
+    'recent_products':recent_products,
 
     }
     return render(request ,"product-list_api.html" , context)
@@ -346,7 +359,8 @@ def product_prand_list(request,prand_pk,page=1):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
-        
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
     has_pre=page_object.has_previous()
     has_next=page_object.has_next()
     pre=page_object.number-1
@@ -356,6 +370,7 @@ def product_prand_list(request,prand_pk,page=1):
     'categories':categories,
     'tags':tags,
     'prands':prandinfo,
+    'recent_products':recent_products,
     'ProductsPrand':ProductsPrand,
     'page_num':page,
     'has_pre':has_pre,
@@ -392,7 +407,9 @@ def product_tag_list(request,tag_pk,page=1):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
-        
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
+
     paginator = Paginator(my_products, per_page=9)
     page_object = paginator.get_page(page)
     has_pre=page_object.has_previous()
@@ -403,6 +420,7 @@ def product_tag_list(request,tag_pk,page=1):
     'products': page_object,
     'categories':categories,
     'tags':tags,
+    'recent_products':recent_products,
     'prands':prandinfo,
     'tag':tag,
     'page_num':page,
@@ -444,6 +462,9 @@ def product_category_prand_list(request,category_pk, prand_pk,page=1):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
 
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
+
     paginator = Paginator(selected_products, per_page=9)
     page_object = paginator.get_page(page)
     has_pre=page_object.has_previous()
@@ -458,6 +479,7 @@ def product_category_prand_list(request,category_pk, prand_pk,page=1):
     'category':category,
     'tags':tags,
     'prands':prandinfo,
+    'recent_products':recent_products,
     'ProductsPrand':ProductsPrand,
     'cat_prand':cat_prand,
     'page_num':page,
@@ -540,6 +562,9 @@ def product_list_price(request,price_cat,page=1):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
 
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
+
     paginator = Paginator(products_filtered, per_page=9)
     page_object = paginator.get_page(page)
     has_pre=page_object.has_previous()
@@ -551,6 +576,7 @@ def product_list_price(request,price_cat,page=1):
     'categories':categories,
     'price_cat':price_cat,
     'tags':tags,
+    'recent_products':recent_products,
     'prands':prandinfo,
     'price_text':price_text,
     'page_num':page,
@@ -631,6 +657,9 @@ def product_list_priceAndCategory(request,category_pk,price_cat,page=1):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
 
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
+
     paginator = Paginator(products_filtered, per_page=9)
     page_object = paginator.get_page(page)
     has_pre=page_object.has_previous()
@@ -646,6 +675,7 @@ def product_list_priceAndCategory(request,category_pk,price_cat,page=1):
     'price_cat':price_cat,
     'price_text':price_text,
     'tags':tags,
+    'recent_products':recent_products,
     'prands':prandinfo,
     'cat_price':cat_price,
     'page_num':page,
@@ -681,6 +711,8 @@ def product_category(request,category_pk,page=1):
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
 
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
 
     has_pre=page_object.has_previous()
     has_next=page_object.has_next()
@@ -690,6 +722,7 @@ def product_category(request,category_pk,page=1):
     'products': page_object,
     'category':category,
     'categories':categories,
+    'recent_products':recent_products,
     'prands':prandinfo,
     'tags':tags,
     'page_num':page,
@@ -730,6 +763,10 @@ def orderd_product_list(request,order_cat,page=1):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
+
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
+
     has_pre=page_object.has_previous()
     has_next=page_object.has_next()
     pre=page_object.number-1
@@ -740,6 +777,7 @@ def orderd_product_list(request,order_cat,page=1):
     'categories':categories,
     'prands':prandinfo,
     'tags':tags,
+    'recent_products':recent_products,
     'order_style':order_style,
     'page_num':page,
     'has_pre':has_pre,
