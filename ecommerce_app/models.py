@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
@@ -199,3 +200,17 @@ class Slider(models.Model):
         if img.height < 400 or img.width < 600:
             img = img.resize((600,400), Image.LANCZOS)
             img.save(self.image.path)  # saving image at the same path
+
+
+def tow_days_hence():
+    return timezone.now() + timezone.timedelta(hours=48)
+class FeaturedProducut(models.Model):
+    product=models.ForeignKey(Product, on_delete=models.CASCADE)
+    added_at=models.DateTimeField(auto_now_add=True )
+    xpiration_time=models.DateTimeField(default=tow_days_hence())
+
+    def __str__(self):
+        return self.product.name + " , " + str(self.xpiration_time) 
+    
+
+

@@ -31,4 +31,5 @@ admin.site.register(OrderItem)
 admin.site.register(ShippingAddress)
 admin.site.register(Review)
 admin.site.register(Contact)
+admin.site.register(FeaturedProducut)
 

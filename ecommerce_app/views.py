@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate as auth_user, login, logout as auth_logout
 import json
 import datetime
+from django.utils import timezone
 
 
 def register(request):
@@ -38,6 +39,8 @@ def register(request):
             return redirect ("/")
             # return render(request, "register.html")
     return render(request, "register.html")
+
+
 def login1(request):
     if request.method == "POST":
         username = request.POST['email']
@@ -86,6 +89,9 @@ def my_account(request):
         'address':edit_user.address,
     }
         return render(request, "my-account.html",context)
+    
+
+
 @login_required(login_url = '/login')
 def change_password(request):
     current_password = request.POST['current_password']
@@ -746,10 +752,23 @@ def orderd_product_list(request,order_cat,page=1):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+# -------------------------------------------------------------------------------------------
 # Add Order in The Cart
 @login_required(login_url = '/login')
 def cart(request):
-
+    
     if request.user.is_authenticated:
 
         order, created = Order.objects.get_or_create(user=request.user, complete=False)
@@ -762,7 +781,8 @@ def cart(request):
     context = {
         "items": items,
         "order": order,
-        "cartItems":cartItems
+        "cartItems":cartItems,
+        
     }
     
     return render(request, "cart.html", context)
@@ -838,6 +858,13 @@ def proccessOrder(request):
     return JsonResponse('Payment subbmitted', safe=False)
 # Home page
 def home(request):
+    products =  Product.objects.all().order_by('-created_at')
+    recent_products=products[:10]
+    old_fetured_products = FeaturedProducut.objects.all().filter(xpiration_time__lt=timezone.now())
+    for pr in old_fetured_products:
+        pr.delete()
+    fetured_products = FeaturedProducut.objects.all().filter(xpiration_time__gt=timezone.now())
+    fetured_products=fetured_products[:10]
     if request.user.is_authenticated:
         user_id =request.user.id
         order , created = Order.objects.get_or_create(user=request.user, complete= False)
@@ -854,6 +881,8 @@ def home(request):
     'categories':categories,
     'slider':slider,
     'cartItems':cartItems,
+    'recent_products':recent_products,
+    'fetured_products':fetured_products
     }
     return render(request ,"index.html" , context)
 
