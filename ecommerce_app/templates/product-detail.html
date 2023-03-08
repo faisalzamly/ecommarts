@@ -82,130 +82,124 @@
 
 
                                 <div class="action">
-                                    <a class="btn" href="#"><i class="fa fa-shopping-cart"></i>Add to Cart</a
-                  >
-                  <a class="btn" href="#"
-                    ><i class="fa fa-shopping-bag"></i>Buy Now</a
-                  >
+                                    <button style="margin-right: 10px;" type="button" class="btn  update-cart" data-product="{{product.id}}" data-action="add">
+                                        <i class="fa fa-shopping-cart"></i>Add to Cart</button>
+                                    <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="row product-detail-bottom">
-          <div class="col-lg-12">
-            <ul class="nav nav-pills nav-justified">
-              <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  data-toggle="pill"
-                  href="#description"
-                  >Description</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="pill" href="#specification">Specification</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="pill" href="#reviews">Reviews (1)</a>
-                                    </li>
-                                    </ul>
+                <div class="row product-detail-bottom">
+                    <div class="col-lg-12">
+                        <ul class="nav nav-pills nav-justified">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="pill" href="#description">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#specification">Specification</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#reviews">Reviews (1)</a>
+                            </li>
+                        </ul>
 
-                                    <div class="tab-content">
-                                        <div id="description" class="container tab-pane active">
-                                            <h4>Product description</h4>
-                                            <p>
-                                                {{product.description}}
-                                            </p>
+                        <div class="tab-content">
+                            <div id="description" class="container tab-pane active">
+                                <h4>Product description</h4>
+                                <p>
+                                    {{product.description}}
+                                </p>
+                            </div>
+                            <div id="specification" class="container tab-pane fade">
+                                <h4>Product specification</h4>
+                                <ul>
+                                    {% for spaci in spacification %}
+                                    <li>{{spaci.title}} : {{spaci.name}}</li>
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                            <div id="reviews" class="container tab-pane fade">
+                                <div class="reviews-submitted">
+                                    <div class="reviewer">
+                                        Phasellus Gravida - <span>01 Jan 2020</span>
+                                    </div>
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <p>
+                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
+                                    </p>
+                                </div>
+                                <div class="reviews-submit">
+                                    <h4>Give your Review:</h4>
+                                    <div class="ratting">
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="row form">
+                                        <div class="col-sm-6">
+                                            <input type="text" placeholder="Name" />
                                         </div>
-                                        <div id="specification" class="container tab-pane fade">
-                                            <h4>Product specification</h4>
-                                            <ul>
-                                                {% for spaci in spacification %}
-                                                <li>{{spaci.title}} : {{spaci.name}}</li>
-                                                {% endfor %}
-
-                                            </ul>
+                                        <div class="col-sm-6">
+                                            <input type="email" placeholder="Email" />
                                         </div>
-                                        <div id="reviews" class="container tab-pane fade">
-                                            <div class="reviews-submitted">
-                                                <div class="reviewer">
-                                                    Phasellus Gravida - <span>01 Jan 2020</span>
-                                                </div>
-                                                <div class="ratting">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                                <p>
-                                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-                                                </p>
-                                            </div>
-                                            <div class="reviews-submit">
-                                                <h4>Give your Review:</h4>
-                                                <div class="ratting">
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                                <div class="row form">
-                                                    <div class="col-sm-6">
-                                                        <input type="text" placeholder="Name" />
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <input type="email" placeholder="Email" />
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <textarea placeholder="Review"></textarea>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <button>Submit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="col-sm-12">
+                                            <textarea placeholder="Review"></textarea>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <button>Submit</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="product">
-                                <div class="section-header">
-                                    <h1>Related Products</h1>
+                <div class="product">
+                    <div class="section-header">
+                        <h1>Related Products</h1>
+                    </div>
+
+                    <div class="row align-items-center product-slider product-slider-3">
+                        {% for related_pro in related_products%}
+                        <div class="col-lg-3">
+                            <div class="product-item">
+                                <div class="product-title">
+                                    <a href="{% url 'product_Details' related_pro.pk %}">{{related_pro.name}}</a>
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
                                 </div>
+                                <div class="product-image">
 
-                                <div class="row align-items-center product-slider product-slider-3">
-                                    {% for related_pro in related_products%}
-                                    <div class="col-lg-3">
-                                        <div class="product-item">
-                                            <div class="product-title">
-                                                <a href="{% url 'product_Details' related_pro.pk %}">{{related_pro.name}}</a>
-                                                <div class="ratting">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <div class="product-image">
+                                    <a href="{% url 'product_Details' related_pro.pk %}">
+                                        <img src="{{related_pro.image.url}}" height="300px" alt="Product Image {{ related_pro.pk}} {{imgea.product}}">
+                                    </a>
 
-                                                <a href="{% url 'product_Details' related_pro.pk %}">
-                                                    <img src="{{related_pro.image.url}}" height="300px" alt="Product Image {{ related_pro.pk}} {{imgea.product}}">
-                                                </a>
-
-                                                <div class="product-action">
-                                                    <a href="{% url 'product_Details' related_pro.pk %}"><i class="fa fa-cart-plus"></i></a>
-                                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                                    <a href="#"><i class="fa fa-search"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <h3><span>$</span>{{related_pro.price}}</h3>
-                                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
+                                    <div class="product-action">
+                                        <a href="{% url 'product_Details' related_pro.pk %}"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>{{related_pro.price}}</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
                   >
                 </div>
               </div>
@@ -243,81 +237,81 @@
             <div class="product-item">
               <div class="product-title">
                 <a href="#">Product Name</a>
-                                                <div class="ratting">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <div class="product-image">
-                                                <a href="product-detail.html">
-                                                    <img src="img/product-7.jpg" alt="Product Image" />
-                                                </a>
-                                                <div class="product-action">
-                                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                                    <a href="#"><i class="fa fa-search"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <h3><span>$</span>99</h3>
-                                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    <a href="product-detail.html">
+                                        <img src="img/product-7.jpg" alt="Product Image" />
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>99</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
                 >
               </div>
             </div>
             <div class="product-item">
               <div class="product-title">
                 <a href="#">Product Name</a>
-                                                <div class="ratting">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <div class="product-image">
-                                                <a href="product-detail.html">
-                                                    <img src="img/product-8.jpg" alt="Product Image" />
-                                                </a>
-                                                <div class="product-action">
-                                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                                    <a href="#"><i class="fa fa-search"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <h3><span>$</span>99</h3>
-                                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    <a href="product-detail.html">
+                                        <img src="img/product-8.jpg" alt="Product Image" />
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>99</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
                 >
               </div>
             </div>
             <div class="product-item">
               <div class="product-title">
                 <a href="#">Product Name</a>
-                                                <div class="ratting">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                </div>
-                                            </div>
-                                            <div class="product-image">
-                                                <a href="product-detail.html">
-                                                    <img src="img/product-9.jpg" alt="Product Image" />
-                                                </a>
-                                                <div class="product-action">
-                                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                                    <a href="#"><i class="fa fa-search"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="product-price">
-                                                <h3><span>$</span>99</h3>
-                                                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    <a href="product-detail.html">
+                                        <img src="img/product-9.jpg" alt="Product Image" />
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>99</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
                 >
               </div>
             </div>
@@ -331,65 +325,65 @@
             <li><a href="{% url 'product_prand_list' prand.pk %}">{{prand.name}} </a><span> &nbsp; 
                 ({{prand.count}})</span></li>{% endfor %}
 
-                                                </ul>
-                                            </div>
-
-                                            {% if tags %}
-                                            <div class="sidebar-widget tag">
-                                                <h2 class="title">Tags Cloud</h2>
-                                                {% for tag in tags %}
-                                                <a href="{% url 'product_tag_list' tag.tag.pk %}">{{tag.tag}}</a> {% endfor%}
-
-                                            </div>
-                                            {% endif %}
-                                        </div>
-                                        <!-- Side Bar End -->
-                                    </div>
+                                    </ul>
                                 </div>
-                            </div>
-                            <!-- Product Detail End -->
 
-                            <!-- Brand Start -->
-                            <div class="brand">
-                                <div class="container-fluid">
-                                    <div class="brand-slider">
-                                        <div class="brand-item"><img src="img/brand-1.png" alt="" /></div>
-                                        <div class="brand-item"><img src="img/brand-2.png" alt="" /></div>
-                                        <div class="brand-item"><img src="img/brand-3.png" alt="" /></div>
-                                        <div class="brand-item"><img src="img/brand-4.png" alt="" /></div>
-                                        <div class="brand-item"><img src="img/brand-5.png" alt="" /></div>
-                                        <div class="brand-item"><img src="img/brand-6.png" alt="" /></div>
-                                    </div>
+                                {% if tags %}
+                                <div class="sidebar-widget tag">
+                                    <h2 class="title">Tags Cloud</h2>
+                                    {% for tag in tags %}
+                                    <a href="{% url 'product_tag_list' tag.tag.pk %}">{{tag.tag}}</a> {% endfor%}
+
                                 </div>
+                                {% endif %}
                             </div>
-                            <!-- Brand End -->
+                            <!-- Side Bar End -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Detail End -->
 
-                            {% endblock %} {% block script %}
-                            <script>
-                                const btn_minus = document.getElementById("btn-minus")
-                                const btn_plus = document.getElementById("btn-plus")
-                                const label_price = document.getElementById("price_product")
-                                const label_quantity = document.getElementById("product_quantity")
-                                btn_minus.addEventListener("click", () => {
-                                    quantity = label_quantity.value
-                                    if (quantity == 1 | quantity == 0) {
-                                        quantity = 1
-                                        label_quantity.value = 1
-                                    }
-                                    label_price.innerHTML = '{{product.price}}' *
-                                        quantity
+                <!-- Brand Start -->
+                <div class="brand">
+                    <div class="container-fluid">
+                        <div class="brand-slider">
+                            <div class="brand-item"><img src="img/brand-1.png" alt="" /></div>
+                            <div class="brand-item"><img src="img/brand-2.png" alt="" /></div>
+                            <div class="brand-item"><img src="img/brand-3.png" alt="" /></div>
+                            <div class="brand-item"><img src="img/brand-4.png" alt="" /></div>
+                            <div class="brand-item"><img src="img/brand-5.png" alt="" /></div>
+                            <div class="brand-item"><img src="img/brand-6.png" alt="" /></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Brand End -->
 
-                                })
-                                btn_plus.addEventListener("click", () => {
-                                    quantity = label_quantity.value
-                                    label_price.innerHTML = '{{product.price}}' *
-                                        quantity
-                                })
-                                const allbtn = document.querySelectorAll(".btn");
-                                allbtn.forEach((element) => {
-                                    element.addEventListener('click', (e) => {
-                                        element.classList.toggle('clicked_btn')
-                                        console.log('suuuuuiiiiiiiiiiiii')
-                                    })
-                                })
-                            </script>{% endblock %}
+                {% endblock %} {% block script %}
+                <script>
+                    const btn_minus = document.getElementById("btn-minus")
+                    const btn_plus = document.getElementById("btn-plus")
+                    const label_price = document.getElementById("price_product")
+                    const label_quantity = document.getElementById("product_quantity")
+                    btn_minus.addEventListener("click", () => {
+                        quantity = label_quantity.value
+                        if (quantity == 1 | quantity == 0) {
+                            quantity = 1
+                            label_quantity.value = 1
+                        }
+                        label_price.innerHTML = '{{product.price}}' *
+                            quantity
+
+                    })
+                    btn_plus.addEventListener("click", () => {
+                        quantity = label_quantity.value
+                        label_price.innerHTML = '{{product.price}}' *
+                            quantity
+                    })
+                    const allbtn = document.querySelectorAll(".btn");
+                    allbtn.forEach((element) => {
+                        element.addEventListener('click', (e) => {
+                            element.classList.toggle('clicked_btn')
+                            console.log('suuuuuiiiiiiiiiiiii')
+                        })
+                    })
+                </script>{% endblock %}

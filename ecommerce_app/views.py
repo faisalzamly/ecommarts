@@ -170,7 +170,7 @@ def product_Details(request , Product_pk):
 def product_list(request):
 
     if request.user.is_authenticated:
-        user_id =request.user.id
+        user_id =request.user
         order, created = Order.objects.get_or_create(user=user_id, complete=False)
         items = order.orderitem_set.all()
         cartItems = order.get_cart_items

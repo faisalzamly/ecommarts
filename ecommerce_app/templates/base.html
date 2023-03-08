@@ -253,13 +253,13 @@
     <script src="{%static 'lib/slick/slick.min.js'%}"></script>
 
     <!-- Template Javascript -->
-    <script src="{%static 'js/main.js'%} ">
+    <script src="{% static 'js/main.js'%} ">
     </script>
-    <script type="text/javascript" src="{%static 'js/cart.js'%}"></script>
+
 
     {% block script %} {% endblock %}
-    <script src="{%static 'js/main.js'%}"></script>
-
+    <script src="{% static 'js/main.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/cart.js'%}"></script>
 </body>
 
 </html>

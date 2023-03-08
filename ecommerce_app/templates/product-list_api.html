@@ -374,7 +374,7 @@
             divContaner.classList.add("col-md-4")
             const pig_a = document.createElement("a")
             const url_to_product_Detiles = 'product/' + pk;
-            pig_a.setAttribute("href", url_to_product_Detiles)
+            // pig_a.setAttribute("href", url_to_product_Detiles)
 
             const divproductItem = document.createElement("div")
             divContaner.classList.add("product-item")
@@ -412,27 +412,49 @@
             // Product action
             const divAction = document.createElement("div")
             divAction.classList.add("product-action")
-            const action_a = document.createElement("a")
-            action_a.setAttribute("href", url_to_product_Detiles)
+            const btn_add_to_cart = document.createElement("button")
+            btn_add_to_cart.classList.add("btn")
+            btn_add_to_cart.classList.add("update-cart")
+            btn_add_to_cart.setAttribute("data-product", pk)
+            btn_add_to_cart.setAttribute("data-action", "add")
+            btn_add_to_cart.setAttribute("type", "button")
+            btn_add_to_cart.addEventListener('click', function() {
+                var productId = this.dataset.product
+                var action = this.dataset.action
+                console.log("productID:", productId, "action:", action)
+
+                console.log('USER:', user)
+                if (user == 'AnonymousUser') {
+                    console.log('Not Logged in')
+                } else {
+                    updateUserOrder(productId, action)
+
+                }
+            })
+
+
+            // const action_a = document.createElement("a")
+
+            // action_a.setAttribute("href", url_to_product_Detiles)
             const ii = document.createElement("i")
             ii.classList.add("fa-cart-plus")
             ii.classList.add("fa")
-            action_a.append(ii)
+            btn_add_to_cart.append(ii)
             const action_a2 = document.createElement("a")
-            action_a2.setAttribute("href", url_to_product_Detiles)
+                // action_a2.setAttribute("href", url_to_product_Detiles)
             const ii2 = document.createElement("i")
             ii2.classList.add("fa-heart")
             ii2.classList.add("fa")
             action_a2.append(ii2)
             const action_a3 = document.createElement("a")
-            action_a3.setAttribute("href", url_to_product_Detiles)
+                // action_a3.setAttribute("href", url_to_product_Detiles)
             const ii3 = document.createElement("i")
             ii3.classList.add("fa-search")
             ii3.classList.add("fa")
             action_a3.append(ii3)
-            divAction.append(action_a)
+            divAction.append(btn_add_to_cart)
             divAction.append(action_a2)
-            divAction.append(action_a3)
+                // divAction.append(action_a3)
             divImge.append(divAction)
             divproductItem.appendChild(divImge)
                 // productPrice
