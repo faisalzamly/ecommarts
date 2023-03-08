@@ -155,18 +155,90 @@
                         {% endif %}
 
                         <ul class="pagination justify-content-center">
-                            {% if has_pre %}
+                            {% if has_pre %} {%if ProductsPrand %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_prand_list' ProductsPrand.pk pre %}"> Previous</a>
+                            </li>{% elif category %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_category' category.pk pre %}"> Previous</a>
+                            </li> {% elif order_cat %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'orderd_product_list' order_cat pre %}"> Previous</a>
+                            </li>{% elif price_cat %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_list_price' price_cat pre %}"> Previous</a>
+                            </li>{% elif tag %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_tag_list' tag.pk pre %}"> Previous</a>
+                            </li> {% elif cat_prand %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_category_prand_list' cat_prand.category_pk cat_prand.prand_pk pre %}"> Previous</a>
+                            </li>
+                            {% elif cat_price %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_list_priceAndCategory' cat_price.category_pk cat_price.price_cat pre %}"> Previous</a>
+                            </li>{% else %}
                             <li class="page-item ">
                                 <a class="page-link" href="{% url 'product_list_pagination' pre %}"> Previous</a>
-                            </li>{% endif%} {% for page_number in products.paginator.page_range %}
+                            </li>{% endif %} {% endif%} {% if products.paginator.num_pages > 1 %}{% for page_number in products.paginator.page_range %} {%if ProductsPrand %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_prand_list' ProductsPrand.pk page_number %}"> 
+                                         {{page_number}}</a>
+                            </li>{% elif category %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_category' category.pk page_number %}"> 
+                                         {{page_number}}</a>
+                            </li>{% elif order_cat %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'orderd_product_list' order_cat page_number %}"> 
+                                    {{page_number}}</a>
+                            </li>{% elif price_cat %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_list_price' price_cat page_number %}"> 
+                                    {{page_number}}</a>
+                            </li>
+                            {% elif tag %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_tag_list' tag.pk page_number %}"> 
+                                    {{page_number}}</a>
+                            </li>{% elif cat_prand %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_category_prand_list' cat_prand.category_pk cat_prand.prand_pk page_number %}"> 
+                                    {{page_number}}</a>
+                            </li>{% elif cat_price %}
+                            <li class="page-item ">
+                                <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_list_priceAndCategory' cat_price.category_pk cat_price.price_cat page_number %}"> 
+                                    {{page_number}}</a>
+                            </li>{% else %}
                             <li class="page-item ">
                                 <a class="page-link {% if page_number == products.number %} current {% endif %}" href="{% url 'product_list_pagination' page_number %}"> 
                                          {{page_number}}</a>
-                            </li>{% endfor %} {% if has_next %}
+                            </li>{% endif %} {% endfor %} {% endif %} {% if has_next %} {%if ProductsPrand %}
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'product_prand_list' ProductsPrand.pk next %}"> Next </a>
+                            </li>{% elif category %}
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'product_category' category.pk pre %}"> Next </a>
+                            </li>{% elif order_cat %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'orderd_product_list' order_cat next %}"> Next</a>
+                            </li>{% elif price_cat %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_list_price' price_cat next %}"> Next</a>
+                            </li>
+                            {% elif tag %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_tag_list' tag.pk next %}"> Next</a>
+                            </li>{% elif cat_prand %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_category_prand_list' cat_prand.category_pk cat_prand.prand_pk next %}"> Next</a>
+                            </li>{% elif cat_price %}
+                            <li class="page-item ">
+                                <a class="page-link" href="{% url 'product_list_priceAndCategory' cat_price.category_pk cat_price.price_cat next %}"> Next</a>
+                            </li>{% else %}
                             <li class="page-item">
                                 <a class="page-link" href="{% url 'product_list_pagination' next %}"> Next </a>
-                            </li>
-                            {% endif %}
+                            </li>{% endif %} {% endif %}
                         </ul>
 
                     </nav>
@@ -276,8 +348,10 @@
                 </div>
 
                 <div class="sidebar-widget brands">
-                    {% if prands %}
-                    <h2 class="title">Our Brands</h2>
+                    {% if prands %} {% if category %}
+                    <h2 class="title">Our {{category.name}} Brands</h2>{% else %}
+                    <h2 class="title">Our Brands</h2>{% endif %}
+
                     <ul>
                         {% if category %}{% for prand in prands %}
                         <li><a href="{% url 'product_category_prand_list' category.pk prand.pk %}">{{prand.name}} </a><span>&nbsp; ({{prand.count}})</span></li>{% endfor %} {% else %} {% for prand in prands %}
