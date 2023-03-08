@@ -59,59 +59,62 @@ def login1(request):
 
 @login_required(login_url = '/login')
 def my_account(request):
-    if request.method == "POST":
-      
-
-        edit_user = Register_models.objects.get(user=request.user)
-        first_name =request.POST['first_name']
-        last_Name =request.POST['last_name']
-        mobile =request.POST['mobile']
-        email =request.POST['email']
-        address =request.POST['address']
-        edit_user.user.email = email
-        edit_user.mobile = mobile
-        edit_user.user.first_name = first_name
-        edit_user.user.last_name = last_Name
-        edit_user.address = address
-        edit_user.user.save()
-        edit_user.save()
-        context = {
-        'mobile':edit_user.mobile,
-        'address':edit_user.address,
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            edit_user = Register_models.objects.get(user=request.user)
+            first_name =request.POST['first_name']
+            last_Name =request.POST['last_name']
+            mobile =request.POST['mobile']
+            email =request.POST['email']
+            address =request.POST['address']
+            edit_user.user.email = email
+            edit_user.mobile = mobile
+            edit_user.user.first_name = first_name
+            edit_user.user.last_name = last_Name
+            edit_user.address = address
+            edit_user.user.save()
+            edit_user.save()
+            context = {
+            'mobile':edit_user.mobile,
+            'address':edit_user.address,
+            }
+            return render(request, "my-account.html",context)
+            
+                    
+        else:
+            edit_user = Register_models.objects.get(user=request.user)
+            context = {
+            'mobile':edit_user.mobile,
+            'address':edit_user.address,
         }
-        return render(request, "my-account.html",context)
-        
-                  
+            return render(request, "my-account.html",context)
     else:
-        edit_user = Register_models.objects.get(user=request.user)
-        context = {
-        'mobile':edit_user.mobile,
-        'address':edit_user.address,
-    }
-        return render(request, "my-account.html",context)
-    
+        return render(request, "index.html")
 
 
 @login_required(login_url = '/login')
 def change_password(request):
-    current_password = request.POST['current_password']
-    new_password = request.POST['new_password']
-    confirm_password=request.POST['confirm_password']
-    if new_password != confirm_password:
-        passnotmatch = True
-        return render(request, "my-account.html", {'passnotmatch':passnotmatch})
-    try:
-        u = User.objects.get(id=request.user.id)
-        if u.check_password(current_password):
-            u.set_password(new_password)
-            u.save()
-            alert = True
-            return render(request, "my-account.html", {'alert':alert})
-        else:
-            currpasswrong = True
-            return render(request, "my-account.html", {'currpasswrong':currpasswrong})
-    except:
-        return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+    if request.user.is_authenticated:
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_password=request.POST['confirm_password']
+        if new_password != confirm_password:
+            passnotmatch = True
+            return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+        try:
+            u = User.objects.get(id=request.user.id)
+            if u.check_password(current_password):
+                u.set_password(new_password)
+                u.save()
+                alert = True
+                return render(request, "my-account.html", {'alert':alert})
+            else:
+                currpasswrong = True
+                return render(request, "my-account.html", {'currpasswrong':currpasswrong})
+        except:
+            return render(request, "my-account.html", {'passnotmatch':passnotmatch})
+    else:
+        return render(request, "index.html")
 #--------------------------------------------------------------------------------------
 #product Details page
 def product_Details(request , Product_pk):
@@ -170,7 +173,7 @@ def product_Details(request , Product_pk):
         review=request.POST['review']
         review=Review.objects.create(name=name,email=email,review=review,product=product)
         review.save()
-        return render(request,"index.html" )
+        return render(request,"product-detail.html" , context)
     return render(request,"product-detail.html" , context)
 
 #--------------------------------------------------------------------------------------
@@ -926,6 +929,22 @@ def home(request):
     }
     return render(request ,"index.html" , context)
 
+def contact(request):
+    if request.method == "POST":       
+        subject=request.POST['subject']        
+        message=request.POST['message']     
+        data_user = Register_models.objects.get(user=request.user)
+        email=data_user.user.email
+        send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+            )   
+        Contact.objects.create(email=email,subject=subject,message=message)
+        return render(request ,"contact.html")
+    return render(request ,"contact.html")
 
 
 def Logout(request):
