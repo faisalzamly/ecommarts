@@ -23,30 +23,30 @@
     <link href="{%static 'lib/slick/slick-theme.css'%}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <<<<<<< HEAD <link href="{%static 'css/style.css'%}" rel="stylesheet"> {% block style %} {% endblock %}
+    <link href="{%static 'css/style.css'%}" rel="stylesheet"> {% block style %} {% endblock %}
 
-        <script type="text/javascript">
-            var user = "{{user}}"
+    <script type="text/javascript">
+        var user = "{{user}}"
 
-            function getToken(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+        function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
                 }
-                return cookieValue;
             }
-            var csrftoken = getToken('csrftoken');
-        </script>
+            return cookieValue;
+        }
+        var csrftoken = getToken('csrftoken');
+    </script>
 
-        =======
-        <link href="{%static 'css/style.css'%}" rel="stylesheet"> >>>>>>> 9631e04121b73b5e39c1dd2325106afc029dd8c1
+
+    <link href="{%static 'css/style.css'%}" rel="stylesheet">
 </head>
 
 <body>
@@ -122,9 +122,8 @@
                 <div class="col-md-3">
                     <div class="logo">
                         <a href="index.html">
-                            <<<<<<< HEAD <img src="{%static 'img/logo1.png'%}" alt="Logo1">
-                                <span>ECommerce</span> =======
-                                <img src="img/logo.png" alt="Logo"> >>>>>>> 9631e04121b73b5e39c1dd2325106afc029dd8c1
+                            <img src="{%static 'img/logo1.png'%}" alt="Logo1">
+                            <span>ECommerce</span>
                         </a>
                     </div>
                 </div>
@@ -140,13 +139,10 @@
                             <i class="fa fa-heart"></i>
                             <span>(0)</span>
                         </a>
-                        <<<<<<< HEAD <a href="{% url 'cart'%}" class="btn cart ">
+                        <a href="{% url 'cart'%}" class="btn cart ">
                             <i class="fa fa-shopping-cart "></i>
-                            <span>{{cartItems}}</span> =======
-                            <a href="cart.html" class="btn cart">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>(0)</span> >>>>>>> 9631e04121b73b5e39c1dd2325106afc029dd8c1
-                            </a>
+                            <span>{{cartItems}}</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -211,19 +207,19 @@
                 <div class="col-md-6">
                     <div class="payment-method">
                         <h2>We Accept:</h2>
-                        <<<<<<< HEAD <img src="{%static 'img/payment-method.png'%} " alt="Payment Method " /> =======
-                        <img src="img/payment-method.png" alt="Payment Method" /> >>>>>>> 9631e04121b73b5e39c1dd2325106afc029dd8c1
+                        <img src="{%static 'img/payment-method.png'%} " alt="Payment Method " />
+                        <img src="img/payment-method.png" alt="Payment Method" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="payment-security">
                         <h2>Secured By:</h2>
-                        <<<<<<< HEAD <img src="{%static 'img/godaddy.svg'%} " alt="Payment Security " />
+                        <img src="{%static 'img/godaddy.svg'%} " alt="Payment Security " />
                         <img src="{%static 'img/norton.svg'%} " alt="Payment Security " />
-                        <img src="{%static 'img/ssl.svg '%}" alt="Payment Security " /> =======
+                        <img src="{%static 'img/ssl.svg '%}" alt="Payment Security " />
                         <img src="img/godaddy.svg" alt="Payment Security" />
                         <img src="img/norton.svg" alt="Payment Security" />
-                        <img src="img/ssl.svg" alt="Payment Security" /> >>>>>>> 9631e04121b73b5e39c1dd2325106afc029dd8c1
+                        <img src="img/ssl.svg" alt="Payment Security" />
                     </div>
                 </div>
             </div>
@@ -257,13 +253,13 @@
     <script src="{%static 'lib/slick/slick.min.js'%}"></script>
 
     <!-- Template Javascript -->
-    <<<<<<< HEAD <script src="{%static 'js/main.js'%} ">
-        </script>
-        <script type="text/javascript" src="{%static 'js/cart.js'%}"></script>
+    <script src="{%static 'js/main.js'%} ">
+    </script>
+    <script type="text/javascript" src="{%static 'js/cart.js'%}"></script>
 
-        {% block script %} {% endblock %} =======
-        <script src="{%static 'js/main.js'%}"></script>
-        >>>>>>> 9631e04121b73b5e39c1dd2325106afc029dd8c1
+    {% block script %} {% endblock %}
+    <script src="{%static 'js/main.js'%}"></script>
+
 </body>
 
 </html>

@@ -40,7 +40,7 @@ urlpatterns = [
         path("cart/", cart, name="cart"),
         path("checkout/", checkout, name="checkout"),
         path("Logout", Logout, name="Logout"),
-        path("contact", contact, name="contact"),
+        # path("contact", contact, name="contact"),
         path("change_password", change_password, name="change_password"),        path("proccess_order/", proccessOrder, name="proccess_order"),
 
 ]  
