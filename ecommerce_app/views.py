@@ -143,7 +143,8 @@ def product_Details(request , Product_pk):
             pranditem.update({"count":count})
             pranditem.update({"pk":pran.pk})
             prandinfo.append(pranditem)
-    
+    products_r =  Product.objects.all().order_by('-created_at')
+    recent_products=products_r[:10]
     review = Review.objects.filter(product=product.pk)
 
     context = {
@@ -152,6 +153,7 @@ def product_Details(request , Product_pk):
     'attributes':attribute,
     'attributeValue':attribute_value,
     'spacification':spacification,
+    'recent_products':recent_products,
     'categories':categories,
     'category':category,
     'related_products':related_products,

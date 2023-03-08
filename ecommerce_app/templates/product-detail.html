@@ -233,158 +233,165 @@
         </div>
 
         <div class="sidebar-widget widget-slider">
-          <div class="sidebar-slider normal-slider">
-            <div class="product-item">
-              <div class="product-title">
-                <a href="#">Product Name</a>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-7.jpg" alt="Product Image" />
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-price">
-                                    <h3><span>$</span>99</h3>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
-                >
-              </div>
+            <div class="section-header">
+                <h2 style="font-family: 'Source Code Pro', monospace;
+                font-weight: 900; color: #ff6f61;
+                 border-top: 3px solid rgba(177, 116, 116, 0.212);">
+                    Recent Products</h2>
             </div>
-            <div class="product-item">
-              <div class="product-title">
-                <a href="#">Product Name</a>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-8.jpg" alt="Product Image" />
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-price">
-                                    <h3><span>$</span>99</h3>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
-                >
-              </div>
-            </div>
-            <div class="product-item">
-              <div class="product-title">
-                <a href="#">Product Name</a>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-9.jpg" alt="Product Image" />
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-price">
-                                    <h3><span>$</span>99</h3>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
+            <div class="sidebar-slider normal-slider">
 
-        <div class="sidebar-widget brands">
-          <h2 class="title">Our Brands</h2>
-          <ul>
-            {% for prand in prands %}
-            <li><a href="{% url 'product_prand_list' prand.pk %}">{{prand.name}} </a><span> &nbsp; 
+                {% for product_recent in recent_products%}
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="#">{{product_recent.name}}</a>
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    <a href="{% url 'product_Details' product_recent.pk %}">
+                                        <img src="{{product_recent.image.url}}" height="300px" alt="Product Image">
+                                    </a>
+                                    <div class="product-action">
+                                        <button style="margin-right: 5px;" type="button" class="btn  update-cart" data-product="{{product.id}}" data-action="add">
+                                <i class="fa fa-cart-plus"></i></button>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>{{product_recent.price}}</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                </div>
+                            </div> {% endfor %}
+
+                            <div class="product-item">
+                                <div class="product-title">
+                                    <a href="#">Product Name</a>
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    <a href="product-detail.html">
+                                        <img src="img/product-9.jpg" alt="Product Image">
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>99</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                </div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-title">
+                                    <a href="#">Product Name</a>
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    <a href="product-detail.html">
+                                        <img src="img/product-8.jpg" alt="Product Image">
+                                    </a>
+                                    <div class="product-action">
+                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <a href="#"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3><span>$</span>99</h3>
+                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget brands">
+                        <h2 class="title">Our Brands</h2>
+                        <ul>
+                            {% for prand in prands %}
+                            <li><a href="{% url 'product_prand_list' prand.pk %}">{{prand.name}} </a><span> &nbsp; 
                 ({{prand.count}})</span></li>{% endfor %}
 
-                                    </ul>
-                                </div>
-
-                                {% if tags %}
-                                <div class="sidebar-widget tag">
-                                    <h2 class="title">Tags Cloud</h2>
-                                    {% for tag in tags %}
-                                    <a href="{% url 'product_tag_list' tag.tag.pk %}">{{tag.tag}}</a> {% endfor%}
-
-                                </div>
-                                {% endif %}
-                            </div>
-                            <!-- Side Bar End -->
-                        </div>
+                        </ul>
                     </div>
-                </div>
-                <!-- Product Detail End -->
 
-                <!-- Brand Start -->
-                <div class="brand">
-                    <div class="container-fluid">
-                        <div class="brand-slider">
-                            <div class="brand-item"><img src="{%static 'img/brand-1.png'%} " alt="" /></div>
-                            <div class="brand-item"><img src="{%static 'img/brand-2.png'%} " alt="" /></div>
-                            <div class="brand-item"><img src="{%static 'img/brand-3.png'%} " alt="" /></div>
-                            <div class="brand-item"><img src="{%static 'img/brand-4.png'%} " alt="" /></div>
-                            <div class="brand-item"><img src="{%static 'img/brand-5.png'%} " alt="" /></div>
-                            <div class="brand-item"><img src="{%static 'img/brand-6.png'%} " alt="" /></div>
+                    {% if tags %}
+                    <div class="sidebar-widget tag">
+                        <h2 class="title">Tags Cloud</h2>
+                        {% for tag in tags %}
+                        <a href="{% url 'product_tag_list' tag.tag.pk %}">{{tag.tag}}</a> {% endfor%}
 
-                        </div>
                     </div>
+                    {% endif %}
                 </div>
-                <!-- Brand End -->
+                <!-- Side Bar End -->
+            </div>
+        </div>
+    </div>
+    <!-- Product Detail End -->
 
-                {% endblock %} {% block script %}
-                <script>
-                    const btn_minus = document.getElementById("btn-minus")
-                    const btn_plus = document.getElementById("btn-plus")
-                    const label_price = document.getElementById("price_product")
-                    const label_quantity = document.getElementById("product_quantity")
-                    btn_minus.addEventListener("click", () => {
-                        quantity = label_quantity.value
-                        if (quantity == 1 | quantity == 0) {
-                            quantity = 1
-                            label_quantity.value = 1
-                        }
-                        label_price.innerHTML = '{{product.price}}' *
-                            quantity
+    <!-- Brand Start -->
+    <div class="brand">
+        <div class="container-fluid">
+            <div class="brand-slider">
+                <div class="brand-item"><img src="{%static 'img/brand-1.png'%} " alt="" /></div>
+                <div class="brand-item"><img src="{%static 'img/brand-2.png'%} " alt="" /></div>
+                <div class="brand-item"><img src="{%static 'img/brand-3.png'%} " alt="" /></div>
+                <div class="brand-item"><img src="{%static 'img/brand-4.png'%} " alt="" /></div>
+                <div class="brand-item"><img src="{%static 'img/brand-5.png'%} " alt="" /></div>
+                <div class="brand-item"><img src="{%static 'img/brand-6.png'%} " alt="" /></div>
 
-                    })
-                    btn_plus.addEventListener("click", () => {
-                        quantity = label_quantity.value
-                        label_price.innerHTML = '{{product.price}}' *
-                            quantity
-                    })
-                    const allbtn = document.querySelectorAll(".btn");
-                    allbtn.forEach((element) => {
-                        element.addEventListener('click', (e) => {
-                            element.classList.toggle('clicked_btn')
-                            console.log('suuuuuiiiiiiiiiiiii')
-                        })
-                    })
-                </script>{% endblock %}
+            </div>
+        </div>
+    </div>
+    <!-- Brand End -->
+
+    {% endblock %} {% block script %}
+    <script>
+        const btn_minus = document.getElementById("btn-minus")
+        const btn_plus = document.getElementById("btn-plus")
+        const label_price = document.getElementById("price_product")
+        const label_quantity = document.getElementById("product_quantity")
+        btn_minus.addEventListener("click", () => {
+            quantity = label_quantity.value
+            if (quantity == 1 | quantity == 0) {
+                quantity = 1
+                label_quantity.value = 1
+            }
+            label_price.innerHTML = '{{product.price}}' *
+                quantity
+
+        })
+        btn_plus.addEventListener("click", () => {
+            quantity = label_quantity.value
+            label_price.innerHTML = '{{product.price}}' *
+                quantity
+        })
+        const allbtn = document.querySelectorAll(".btn");
+        allbtn.forEach((element) => {
+            element.addEventListener('click', (e) => {
+                element.classList.toggle('clicked_btn')
+                console.log('suuuuuiiiiiiiiiiiii')
+            })
+        })
+    </script>{% endblock %}
