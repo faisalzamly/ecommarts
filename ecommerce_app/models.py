@@ -213,4 +213,37 @@ class FeaturedProducut(models.Model):
         return self.product.name + " , " + str(self.xpiration_time) 
     
 
+class Category_Side(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    title=models.CharField(max_length=40)
+    active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to=f"image/cat", blank=True )
 
+    def __str__(self):
+        return self.category.name +" , " + self.title
+
+class Vertical_Side(models.Model):
+    title       = models.CharField(max_length=150)
+    sub_title   = models.CharField(max_length=100)
+    link        = models.TextField(null=True, blank=True)
+    image = models.ImageField(help_text="Size: 250x200",upload_to='image/Vertical_slider')
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    # Update Image before save to slider
+    def save(self):
+        super().save()  # saving image first
+
+        img = Image.open(self.image.path) # Open image using self
+        if img.height > 210 or img.width > 260:
+            new_width  = 250
+            new_height = new_width * img.height / img.width 
+            new_height = 200
+            new_width  = new_height * img.width / img.height
+            img = img.resize((int(new_width), int(new_height)), Image.LANCZOS)
+            img.save(self.image.path)  # saving image at the same path
+        if img.height < 200 or img.width < 250:
+            img = img.resize((250,200), Image.LANCZOS)
+            img.save(self.image.path)  # saving image at the same path

@@ -1,115 +1,81 @@
 {% extends 'base.html' %} {% load static %} {% block body %}
 <!-- Breadcrumb Start -->
 <div class="breadcrumb-wrap">
-  <div class="container-fluid">
-    <ul class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#">Home</a></li>
-      <li class="breadcrumb-item"><a href="#">Products</a></li>
-      <li class="breadcrumb-item active">Checkout</li>
-    </ul>
-  </div>
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Products</a></li>
+            <li class="breadcrumb-item active">Checkout</li>
+        </ul>
+    </div>
 </div>
 <!-- Breadcrumb End -->
 
 <!-- Checkout Start -->
 <div class="checkout">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="checkout-inner">
-          <div class="billing-address" id="billing-address">
-            <h2>Shipping Address</h2>
-            <div class="row">
-              <div class="col-md-6">
-                <label>First Name</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="First Name"
-                  name="first_name"
-                  id="first_name"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label>Last Name"</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Last Name"
-                  name="last_name"
-                  id="last_name"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label>E-mail</label>
-                <input class="form-control" type="text" placeholder="E-mail" name="email" pattern=".+@gmail\.com|.+@hotmail\.com" id="email" required />
-              </div>
-              <div class="col-md-6">
-                <label>Mobile No</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Mobile No"
-                  name="phone"
-                  id="phone"
-                  required
-                />
-              </div>
-              <div class="col-md-12">
-                <label>Address</label>
-                <input class="form-control" type="text" placeholder="Address" name="address" id="address" required />
-              </div>
-              <div class="col-md-6">
-                <label>City</label>
-                <input class="form-control" type="text" placeholder="City" name="city" id="city"required />
-              </div>
-              <div class="col-md-6">
-                <label>State</label>
-                <input class="form-control" type="text" placeholder="State" name="state" id="state" required />
-              </div>
-              <div class="col-md-6 ">
-                <label>ZIP Code</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="ZIP Code"
-                  name="zipcode"
-                  id="zipcode"
-                  required
-                />
-              </div>
-            </div>
-            <div class="checkout-btn">
-              <button
-                class="btn btn-md w-100"
-                id="btn-billing-address"
-              >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="checkout-inner">
+                    <div class="billing-address" id="billing-address">
+                        <h2>Shipping Address</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>First Name</label>
+                                <input class="form-control" type="text" placeholder="First Name" name="first_name" id="first_name" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label>Last Name"</label>
+                                <input class="form-control" type="text" placeholder="Last Name" name="last_name" id="last_name" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label>E-mail</label>
+                                <input class="form-control" type="text" placeholder="E-mail" name="email" pattern=".+@gmail\.com|.+@hotmail\.com" id="email" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label>Mobile No</label>
+                                <input class="form-control" type="text" placeholder="Mobile No" name="phone" id="phone" required />
+                            </div>
+                            <div class="col-md-12">
+                                <label>Address</label>
+                                <input class="form-control" type="text" placeholder="Address" name="address" id="address" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label>City</label>
+                                <input class="form-control" type="text" placeholder="City" name="city" id="city" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label>State</label>
+                                <input class="form-control" type="text" placeholder="State" name="state" id="state" required />
+                            </div>
+                            <div class="col-md-6 ">
+                                <label>ZIP Code</label>
+                                <input class="form-control" type="text" placeholder="ZIP Code" name="zipcode" id="zipcode" required />
+                            </div>
+                        </div>
+                        <div class="checkout-btn">
+                            <button class="btn btn-md w-100" id="btn-billing-address">
               Continue
               </button>
-            </div>
-          </div>
+                        </div>
+                    </div>
 
-          <div class="payment-methods invisible" id="payment-methods">
-            <h2>Payment Methods</h2>
-            <div class="row"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="checkout-inner">
-          <div class="checkout-summary">
-            <h1>Cart Total</h1>
-            <p>Orders<span>{{order.get_cart_items}}</span></p>
-            <p class="ship-cost">Shipping Cost<span>$1</span></p>
-            <h2>Grand Total<span>${{order.get_cart_total}}</span></h2>
-          </div>
-          <div class="checkout-btn">
-            <button
-              class="btn btn-lg proccess algin-center w-100 invisible"
-              id="btn-proccess-checkout"
-              >order</button
+                    <div class="payment-methods invisible" id="payment-methods">
+                        <h2>Payment Methods</h2>
+                        <div class="row"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="checkout-inner">
+                    <div class="checkout-summary">
+                        <h1>Cart Total</h1>
+                        <p>Orders<span>{{order.get_cart_items}}</span></p>
+                        <p class="ship-cost">Shipping Cost<span>$1</span></p>
+                        <h2>Grand Total<span>${{order.get_cart_total}}</span></h2>
+                    </div>
+                    <div class="checkout-btn">
+                        <button class="btn btn-lg proccess algin-center w-100 invisible" id="btn-proccess-checkout">order</button
             >
           </div>
         </div>

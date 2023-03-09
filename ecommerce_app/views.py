@@ -162,12 +162,11 @@ def product_Details(request , Product_pk):
     'related_products':related_products,
     'prands':prandinfo,
     'tags':tags,
-    'review':review
+    'reviews':review
 
 
     }
     if request.method == "POST":
-        
         name=request.user.first_name
         email=request.user.email
         review=request.POST['review']
@@ -919,13 +918,50 @@ def home(request):
         cartItems = order['get_cart_items']
 
     categories= Category.objects.all()
-    slider = Slider.objects.filter(active=True)[:4]
+    slider = Slider.objects.filter(active=True)[:6]
+    category_Side = Category_Side.objects.all().filter(active=True)[:6]
+    vertical_side=Vertical_Side.objects.all().filter(active=True)[:2]
+    if(len(category_Side)>0):
+        cat_side1=category_Side[0]
+    else:
+        cat_side1=None
+    if(len(category_Side)>1):
+        cat_side2=category_Side[1]
+    else:
+        cat_side2=None
+    if(len(category_Side)>2):
+        cat_side3=category_Side[2]
+    else:
+        cat_side3=None
+    if(len(category_Side)>3):
+        cat_side4=category_Side[3]
+    else:
+        cat_side4=None
+    if(len(category_Side)>4):
+        cat_side5=category_Side[4]
+    else:
+        cat_side5=None
+    if(len(category_Side)>5):
+        cat_side6=category_Side[5]
+    else:
+        cat_side6=None
+
     context = {
     'categories':categories,
     'slider':slider,
     'cartItems':cartItems,
     'recent_products':recent_products,
-    'fetured_products':fetured_products
+    'fetured_products':fetured_products,
+    "category_Side":category_Side,
+    'vertical_side':vertical_side,
+    "cat_side1":cat_side1,
+    "cat_side2":cat_side2,
+    "cat_side3":cat_side3,
+    "cat_side4":cat_side4,
+    "cat_side5":cat_side5,
+    "cat_side6":cat_side6,
+   
+
     }
     return render(request ,"index.html" , context)
 

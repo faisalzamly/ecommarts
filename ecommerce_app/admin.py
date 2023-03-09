@@ -32,4 +32,6 @@ admin.site.register(ShippingAddress)
 admin.site.register(Review)
 admin.site.register(Contact)
 admin.site.register(FeaturedProducut)
+admin.site.register(Category_Side)
+admin.site.register(Vertical_Side)
 
