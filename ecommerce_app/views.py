@@ -898,6 +898,7 @@ def proccessOrder(request):
         print("You are not authenticated")
    
     return JsonResponse('Payment subbmitted', safe=False)
+
 # Home page
 def home(request):
     products =  Product.objects.all().order_by('-created_at')
